@@ -1,43 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Unity.VisualScripting.ReorderableList.Internal;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class RelativePlayerMovement : MonoBehaviour
 {
-    public float speed = 6.0f;
-    public float rotationSpeed = 90.0f;
+    public float Speed = 6.0f;
 
-    private Transform cameraTransform;
+    [SerializeField] private Animator _animatorController;
+
+    private ConfigurableJoint _configurableJoint;
+    private Quaternion _initialRot;
 
     private void Start()
     {
-        cameraTransform = Camera.main.transform;
+        _configurableJoint = gameObject.GetComponent<ConfigurableJoint>();
+        _initialRot = _configurableJoint.transform.localRotation;
     }
 
     private void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        var horizontal = Input.GetAxis("Horizontal");
+        var vertical = Input.GetAxis("Vertical");
 
-        Vector3 forward = cameraTransform.forward;
-        Vector3 right = cameraTransform.right;
+        var forward = Camera.main.transform.forward;
+        var right = Camera.main.transform.right;
 
         forward.y = 0;
         right.y = 0;
         forward.Normalize();
         right.Normalize();
 
-        Vector3 direction = forward * vertical + right * horizontal;
-
-        transform.position += direction * speed * Time.deltaTime;
+        var direction = forward * vertical + right * horizontal;
 
         if (direction.magnitude > 0)
         {
-            Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            _animatorController.SetBool("isMoving", true);
+            transform.position += Speed * Time.deltaTime * direction;
         }
+        else _animatorController.SetBool("isMoving", false);
     }
+
+
 }

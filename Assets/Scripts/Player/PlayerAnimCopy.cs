@@ -6,15 +6,15 @@ using UnityEngine;
 public class PlayerAnimCopy : MonoBehaviour
 {
     [SerializeField] private Transform AnimTargetLimb;
-    private Quaternion initialRot;
-    
+    private Quaternion _initialRot;
+
     void Start()
     {
-        initialRot = AnimTargetLimb.transform.localRotation;
+        _initialRot = AnimTargetLimb.transform.localRotation;
     }
 
     void FixedUpdate()
     {
-        GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Inverse(this.AnimTargetLimb.localRotation) * initialRot;
+        GetComponent<ConfigurableJoint>().targetRotation = Quaternion.Inverse(this.AnimTargetLimb.localRotation) * _initialRot;
     }
 }
