@@ -18,6 +18,8 @@ public class RelativePlayerRotation : MonoBehaviour
 
         // Create the rotation we need according to moveDir
         var lookRotation = Quaternion.LookRotation(moveDir);
+        lookRotation.x = 0;
+        lookRotation.z = 0;
 
         // Rotate player over time according to speed until we are in the required rotation
         this.transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * RotationSpeed);
