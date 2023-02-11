@@ -43,7 +43,7 @@ public class PlayerGunHandler : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Instantiate(closestGun).parent = _gunHand;
+            Instantiate(closestGun, _gunHand).parent = _gunHand;
             Destroy(closestGun.gameObject);
             _weapon = closestGun.GetComponent<Weapon>();
         }
