@@ -17,13 +17,25 @@ public class Weapon : MonoBehaviour
         SMG
     }
 
-    private WEAPON _weaponType;
+    [System.Serializable]
+    public class gunFX
+    {
+        public VFXManager.VFX_TYPE type;
+        public Transform transform;
+    }
 
     private bool _canShoot = false;
     private bool _canReload = false;
 
-    [SerializeField] private int _maxAmmo;
-    
+    /*[SerializeField]*/ private int _maxAmmo;
+
+    [Tooltip("The FX that plays on shooting")]
+    public gunFX[] _gunFXs;
+
+    [Tooltip("The FX that plays on reloading")]
+    public gunFX[] _gunReloadFxs;
+
+    public WEAPON WeaponType = WEAPON.NONE;
     public float Recoil;
     public float FireDelay;
     public float ReloadDelay;
@@ -32,12 +44,20 @@ public class Weapon : MonoBehaviour
 
     void Start()
     {
+
+        if (_gunFXs.Length == 0)
+        {
+            Debug.LogError("make sure you have atleast one FX for selected on the weapon component");
+        }
+
+
+        _canShoot = true;
         _maxAmmo = Ammo;
     }
 
     public void Shoot()
     {
-
+        Debug.Log("shooting");
         if (Ammo == 0)
         {
             Reload();
@@ -55,6 +75,22 @@ public class Weapon : MonoBehaviour
         {
             Debug.Log("hit: " + hit.collider.name);
         }
+
+        foreach (var t in _gunFXs)
+        {
+            VFXManager.Instance.play_FX(t.transform, t.type);
+        }
+
+        var colliders = Physics.OverlapSphere(transform.position, 2);
+        foreach (var col in colliders)
+        {
+            var rb = col.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.AddExplosionForce(Recoil * 100f, transform.position, 2);
+            }
+        }
+
         yield return new WaitForSeconds(FireDelay);
         _canShoot = true;
     }
@@ -70,6 +106,11 @@ public class Weapon : MonoBehaviour
         _canReload = false;
 
         // reload animation
+        if (_gunReloadFxs.Length != 0 )
+            foreach (var t in _gunReloadFxs)
+            {
+                VFXManager.Instance.play_FX(t.transform, t.type);
+            }
 
         yield return new WaitForSeconds(ReloadDelay);
 
