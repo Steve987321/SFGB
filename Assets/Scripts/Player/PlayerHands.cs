@@ -1,15 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Analytics;
-using static UnityEditor.Progress;
 
 public class PlayerHands : MonoBehaviour
 {
     [HideInInspector] public GameObject HeldObject;
-
+    
     private bool _mdown = false;
     private bool _isHolding = false;
 

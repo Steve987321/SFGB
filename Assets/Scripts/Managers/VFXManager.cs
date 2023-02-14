@@ -13,7 +13,8 @@ public class VFXManager : MonoBehaviour
 
     [SerializeField] private ParticleSystem _muzzleFlash;
     [SerializeField] private ParticleSystem _sparks;
-    [SerializeField] private ParticleSystem _smoke;
+    [SerializeField] private ParticleSystem _smokeGun;
+    [SerializeField] private ParticleSystem _smokeBig;
 
     public static VFXManager Instance;
 
@@ -39,29 +40,45 @@ public class VFXManager : MonoBehaviour
 
     public void play_smokepuff(Vector3 pos, Quaternion rot)
     {
-        var smoke = Instantiate(_smoke);
+        var smoke = Instantiate(_smokeBig);
         smoke.transform.SetPositionAndRotation(pos, rot);
         smoke.Play();
-        Destroy(smoke.gameObject, smoke.main.duration);
+        Destroy(smoke.gameObject, 3);
     }
 
     public void play_muzzleflash(Vector3 pos, Quaternion rot)
     {
         var mz = Instantiate(_muzzleFlash);
-        var smoke = Instantiate(_smoke);
+        var smoke = Instantiate(_smokeBig);
+        var smokeshort = Instantiate(_smokeGun);
         var sparks = Instantiate(_sparks);
 
         mz.transform.SetPositionAndRotation(pos, rot);
         smoke.transform.SetPositionAndRotation(pos, rot);
+        smokeshort.transform.SetPositionAndRotation(pos, rot);
         sparks.transform.SetPositionAndRotation(pos, rot);
 
         mz.Play();
         smoke.Play();
+        smokeshort.Play();
         sparks.Play();
 
-        Destroy(mz.gameObject, mz.main.duration);
-        Destroy(smoke.gameObject, smoke.main.duration);
-        Destroy(sparks.gameObject, sparks.main.duration);
+        Destroy(mz.gameObject, 2);
+        Destroy(smoke.gameObject, 3);
+        Destroy(smokeshort.gameObject, 2);
+        Destroy(sparks.gameObject, 2);
     }
     
+    public void apply_force(Vector3 at, float force, float radius)
+    {
+        var colliders = Physics.OverlapSphere(at, radius);
+        foreach (var col in colliders)
+        {
+            var rb = col.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.AddExplosionForce(force, at, radius);
+            }
+        }
+    }
 }
