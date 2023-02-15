@@ -2630,6 +2630,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 979272549}
+--- !u!114 &1747553922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747553907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc515c9b45b4ef4c86525d345f0c381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PunchThreshold: 0
 --- !u!1 &1752898637
 GameObject:
   m_ObjectHideFlags: 0
@@ -3649,19 +3662,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4718170267674616850, guid: d436a14a7a2cb2a4c856b1274da19cb5, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9973285
+      value: 0.99694115
       objectReference: {fileID: 0}
     - target: {fileID: 4718170267674616850, guid: d436a14a7a2cb2a4c856b1274da19cb5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.00000005732126
+      value: 0.00000006133042
       objectReference: {fileID: 0}
     - target: {fileID: 4718170267674616850, guid: d436a14a7a2cb2a4c856b1274da19cb5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000009572106
+      value: -0.000000102415974
       objectReference: {fileID: 0}
     - target: {fileID: 4718170267674616850, guid: d436a14a7a2cb2a4c856b1274da19cb5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.07304641
+      value: 0.07815541
       objectReference: {fileID: 0}
     - target: {fileID: 4718170267674616850, guid: d436a14a7a2cb2a4c856b1274da19cb5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -4045,8 +4058,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _PlayerCenter: {fileID: 5583770437072205156}
-  _aimUpperArm: {fileID: 1063428718}
+  _otherUArm: {fileID: 1297164224}
+  _otherLArm: {fileID: 1091643864}
+  _dominantUArm: {fileID: 1063428718}
+  _dominantLArm: {fileID: 19758669}
   _aimRot: {x: 12.754739, y: 268.0264, z: 269.5641}
+  _punchRotUpper: {x: 6.6774516, y: 74.895065, z: 88.20232}
+  _punchRotLower: {x: 44.304283, y: 8.857358, z: 12.5771675}
+  _climbRotUpper: {x: 0, y: 0, z: 0}
+  _climbRotLower: {x: 0, y: 0, z: 0}
 --- !u!1 &4135851632219348765 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2742304078271176001, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
