@@ -8,13 +8,13 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerGunHandler : MonoBehaviour
 {
-    [SerializeField] private Animator _animatorController;
     [SerializeField] private Transform _gunHand;
 
     private GameObject _weapon;
     private float _gunRBMass;
 
-    private bool _hasGun = false;
+    // whether the player has a weapon equipped
+    public bool HasWeapon = false;
 
     void Start()
     {
@@ -23,7 +23,7 @@ public class PlayerGunHandler : MonoBehaviour
 
     void Update()
     {
-        if (!_hasGun)
+        if (!HasWeapon)
         {
             pickUpGunHandler();
         }
@@ -46,7 +46,7 @@ public class PlayerGunHandler : MonoBehaviour
 
                 f.tag = "Gun";
                 Destroy(_weapon);
-                _hasGun = false;
+                HasWeapon = false;
             }
             
         }
@@ -71,7 +71,7 @@ public class PlayerGunHandler : MonoBehaviour
             go.tag = "Untagged";
             Destroy(closestGun.gameObject);
             _weapon = go.gameObject;
-            _hasGun = true;
+            HasWeapon = true;
         }
     }
 

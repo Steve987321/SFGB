@@ -30,7 +30,7 @@ public class PlayerHands : MonoBehaviour
         var item = Helper.GetClosest(transform, transforms);
         if (item == null) return;
 
-        var collider = item.GetComponent<Collider>(); 
+        var collider = item.GetComponent<Collider>();
         //Debug.Log(Vector3.Distance(transform.position, collider.ClosestPoint(transform.position)));
         //Debug.DrawLine(collider.ClosestPoint(transform.position), transform.position);
         if (!Helper.IsInReach(collider.ClosestPoint(transform.position), transform.position, 0.2f)) return;

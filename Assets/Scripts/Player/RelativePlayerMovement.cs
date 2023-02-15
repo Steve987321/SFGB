@@ -4,16 +4,10 @@ public class RelativePlayerMovement : MonoBehaviour
 {
     public float Speed = 6.0f;
 
-    [SerializeField] private Animator _animatorController;
-
-    private ConfigurableJoint _configurableJoint;
-    private Quaternion _initialRot;
-
-    private void Start()
-    {
-        _configurableJoint = gameObject.GetComponent<ConfigurableJoint>();
-        _initialRot = _configurableJoint.transform.localRotation;
-    }
+    /// <summary>
+    /// whether the player is receiving input and is trying to move
+    /// </summary>
+    public bool IsMoving = false;
 
     private void Update()
     {
@@ -30,12 +24,10 @@ public class RelativePlayerMovement : MonoBehaviour
 
         var direction = forward * vertical + right * horizontal;
 
-        if (direction.magnitude > 0)
-        {
-            _animatorController.SetBool("isMoving", true);
+        IsMoving = direction.magnitude > 0;
+
+        if (IsMoving)
             transform.position += Speed * Time.deltaTime * direction;
-        }
-        else _animatorController.SetBool("isMoving", false);
     }
 
 
