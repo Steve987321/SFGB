@@ -52,7 +52,6 @@ public class PlayerGunHandler : MonoBehaviour
         }
     }
 
-
     private void pickUpGunHandler()
     {
         var transforms = GameObject.FindGameObjectsWithTag("Gun").Select(gun => gun.transform);
@@ -67,6 +66,8 @@ public class PlayerGunHandler : MonoBehaviour
             var go = Instantiate(closestGun);
             Destroy(go.GetComponent<Rigidbody>());
             go.SetPositionAndRotation(_gunHand.position, _gunHand.rotation);
+            if (go.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG)
+                go.rotation *= Quaternion.Euler(-4.9f, -20.8f, 0.0f);
             go.parent = _gunHand;
             go.tag = "Untagged";
             Destroy(closestGun.gameObject);

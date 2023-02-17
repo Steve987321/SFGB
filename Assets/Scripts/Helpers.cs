@@ -29,4 +29,49 @@ public class Helper
 
         return bestTarget;
     }
+
+    public static Rigidbody[] GetAllRigidBodiesInChildren(GameObject root, string Ignore = "")
+    {
+        var children = root.GetComponentsInChildren<Transform>();
+        var rigidbodies = new Rigidbody[children.Length];
+        int count = 0;
+
+        foreach (var child in children)
+        {
+            if (Ignore != "" && child.name.Contains(Ignore)) continue;
+            var rb = child.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rigidbodies[count] = rb;
+                count++;
+            }
+        }
+
+        // Trim array to actual number of rigidbodies
+        System.Array.Resize(ref rigidbodies, count);
+
+        return rigidbodies;
+    }
+    public static Transform[] GetAllTransformsInChildren(GameObject root, string Ignore = "")
+    {
+        var children = root.GetComponentsInChildren<Transform>();
+        var transforms = new Transform[children.Length];
+        int count = 0;
+
+        foreach (var child in children)
+        {
+            if (Ignore != "" && child.name.Contains(Ignore)) continue;
+            var rb = child.GetComponent<Transform>();
+            if (rb != null)
+            {
+                transforms[count] = rb;
+                count++;
+            }
+        }
+
+        // Trim array to actual number of rigidbodies
+        System.Array.Resize(ref transforms, count);
+
+        return transforms;
+    }
 }

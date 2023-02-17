@@ -13,9 +13,6 @@ public class PlayerAnimationHandler : MonoBehaviour
     [SerializeField] private Rigidbody _lHand;
     [SerializeField] private Rigidbody _rHand;
 
-    [Header("on aim")]
-    [SerializeField] private Vector3 _aimRot;
-
     private Animator _animController;
     private RelativePlayerMovement _playerMovement;
     private PlayerGunHandler _playerGunHandler;

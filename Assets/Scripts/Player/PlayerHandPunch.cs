@@ -17,7 +17,7 @@ public class PlayerHandPunch : MonoBehaviour
 
     void Start()
     {
-        _excludeRb = GetAllRigidBodiesInChildren(_root.gameObject);
+        _excludeRb = Helper.GetAllRigidBodiesInChildren(_root.gameObject);
         _rb = GetComponent<Rigidbody>();
     }
 
@@ -27,29 +27,6 @@ public class PlayerHandPunch : MonoBehaviour
         if (_rb.velocity.magnitude > _punchHitThreshold)
         {
             VFXManager.Instance.apply_force(transform.position, _punchForce * 10, 1, _excludeRb);
-            print("hit");
         }
-    }
-
-    public static Rigidbody[] GetAllRigidBodiesInChildren(GameObject root)
-    {
-        var children = root.GetComponentsInChildren<Transform>();
-        var rigidbodies = new Rigidbody[children.Length];
-        int count = 0;
-
-        foreach (var child in children)
-        {
-            var rb = child.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rigidbodies[count] = rb;
-                count++;
-            }
-        }
-
-        // Trim array to actual number of rigidbodies
-        System.Array.Resize(ref rigidbodies, count);
-
-        return rigidbodies;
     }
 }
