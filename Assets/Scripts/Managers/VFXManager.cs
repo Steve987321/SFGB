@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
+using Random = UnityEngine.Random;
 
 public class VFXManager : MonoBehaviour
 {
@@ -10,7 +12,18 @@ public class VFXManager : MonoBehaviour
     {
         SMOKE,
         MUZZLEFLASH,
-        SPARKHITBIG
+        SPARKHITBIG,
+        SPARKHIT,
+
+        BLOODHIT,
+    }
+
+    public enum BULLET_HOLE_TYPE
+    {
+        GLASS,
+        METAL,
+        WOOD,
+        EXPLOSION,
     }
 
     [SerializeField] private ParticleSystem _muzzleFlash;
@@ -19,6 +32,19 @@ public class VFXManager : MonoBehaviour
     [SerializeField] private ParticleSystem _smokeBig;
     [SerializeField] private ParticleSystem _bigSparkHit;
 
+    [Space] 
+
+    [SerializeField] private GameObject[] _metalHits;
+    [SerializeField] private GameObject[] _woodHits;
+    [SerializeField] private GameObject[] _glassHits;
+
+    [Space]
+    
+    [SerializeField] private ParticleSystem _bloodSplatter;
+    [SerializeField] private ParticleSystem _bloodMist;
+
+    private List<GameObject> _activeBulletHoles = new();
+
     public static VFXManager Instance;
 
     void Awake()
@@ -26,22 +52,34 @@ public class VFXManager : MonoBehaviour
         Instance = this;
     }
 
-    public void play_FX(Transform at, VFX_TYPE type)
+    public void play_FX(Vector3 pos, Quaternion rot, VFX_TYPE type)
     {
         switch (type)
         {
             case VFX_TYPE.SMOKE:
-                play_smokepuff(at.position, at.rotation);
+                play_smokepuff(pos, rot);
                 break;
             case VFX_TYPE.MUZZLEFLASH:
-                play_muzzleflash(at.position, at.rotation);
+                play_muzzleflash(pos, rot);
                 break;
             case VFX_TYPE.SPARKHITBIG:
-                play_sparkHitBig(at.position, at.rotation);
+                play_sparkHitBig(pos, rot);
+                break;
+            case VFX_TYPE.BLOODHIT:
+                play_bloodMist(pos, rot);
+                play_bloodSplatter(pos, rot);
+                break;
+            case VFX_TYPE.SPARKHIT:
+                play_sparkHit(pos, rot);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
+    }
+
+    public void play_FX(Transform at, VFX_TYPE type)
+    {
+        play_FX(at.position, at.rotation, type);
     }
 
     private void PlayParticleSystem(ParticleSystem p, Vector3 pos, Quaternion rot, float delay = 5)
@@ -52,13 +90,18 @@ public class VFXManager : MonoBehaviour
         Destroy(instance.gameObject, delay);
     }
 
+    public void play_bloodSplatter(Vector3 pos, Quaternion rot)
+    {
+        PlayParticleSystem(_bloodSplatter, pos, rot, 3f);
+    }
+    public void play_bloodMist(Vector3 pos, Quaternion rot)
+    {
+        PlayParticleSystem(_bloodMist, pos, rot, 4f);
+    }
+
     public void play_smokepuff(Vector3 pos, Quaternion rot)
     {
         PlayParticleSystem(_smokeBig, pos, rot, 3);
-        //var smoke = Instantiate(_smokeBig);
-        //smoke.transform.SetPositionAndRotation(pos, rot);
-        //smoke.Play();
-        //Destroy(smoke.gameObject, 3);
     }
 
     public void play_muzzleflash(Vector3 pos, Quaternion rot)
@@ -67,33 +110,17 @@ public class VFXManager : MonoBehaviour
         PlayParticleSystem(_smokeBig, pos, rot, 3);
         PlayParticleSystem(_smokeGun, pos, rot, 3);
         PlayParticleSystem(_sparks, pos, rot, 3);
-
-        //var mz = Instantiate(_muzzleFlash);
-        //var smoke = Instantiate(_smokeBig);
-        //var smokeshort = Instantiate(_smokeGun);
-        //var sparks = Instantiate(_sparks);
-
-        //mz.transform.SetPositionAndRotation(pos, rot);
-        //smoke.transform.SetPositionAndRotation(pos, rot);
-        //smokeshort.transform.SetPositionAndRotation(pos, rot);
-        //sparks.transform.SetPositionAndRotation(pos, rot);
-
-        //mz.Play();
-        //smoke.Play();
-        //smokeshort.Play();
-        //sparks.Play();
-
-        //Destroy(mz.gameObject, 2);
-        //Destroy(smoke.gameObject, 3);
-        //Destroy(smokeshort.gameObject, 2);
-        //Destroy(sparks.gameObject, 2);
     }
 
     public void play_sparkHitBig(Vector3 pos, Quaternion rot)
     {
         PlayParticleSystem(_bigSparkHit, pos, rot, 3);
+        PlayParticleSystem(_sparks, pos, rot, 3);
     }
-    
+    private void play_sparkHit(Vector3 pos, Quaternion rot)
+    {
+        PlayParticleSystem(_sparks, pos, rot, 3);
+    }
     public void apply_force(Vector3 at, float force, float radius)
     {
         var colliders = Physics.OverlapSphere(at, radius);
@@ -120,4 +147,47 @@ public class VFXManager : MonoBehaviour
             }
         }
     }
+
+    public void AddBulletHole(Vector3 pos, Vector3 normal, BULLET_HOLE_TYPE type)
+    {
+        var bHoleObj = type switch
+        {
+            BULLET_HOLE_TYPE.GLASS => _glassHits[Random.Range(0, _glassHits.Length - 1)],
+            BULLET_HOLE_TYPE.METAL => _metalHits[Random.Range(0, _metalHits.Length - 1)],
+            BULLET_HOLE_TYPE.WOOD => _woodHits[Random.Range(0, _woodHits.Length - 1)],
+            BULLET_HOLE_TYPE.EXPLOSION => _metalHits[Random.Range(0, _metalHits.Length - 1)],
+            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+        };
+
+        var rot = Quaternion.FromToRotation(Vector3.up, normal);
+
+        if (type == BULLET_HOLE_TYPE.EXPLOSION)
+        {
+            play_FX(pos, rot, VFX_TYPE.SPARKHITBIG);
+            _activeBulletHoles.Add(
+                Instantiate(bHoleObj, pos + (normal * 0.01f), rot)
+            );
+        }
+        else
+        {
+            play_FX(pos, rot, VFX_TYPE.SPARKHIT);
+            _activeBulletHoles.Add(
+                Instantiate(bHoleObj, pos + (normal * 0.01f), rot)
+            );
+        }
+    }
+
+    public void AddBulletHole(RaycastHit hit, BULLET_HOLE_TYPE type)
+    {
+        AddBulletHole(hit.point, hit.normal, type);
+    }
+
+    public void CleanBulletHoles()
+    {
+        foreach (var bullethole in _activeBulletHoles)
+        {
+            Destroy(bullethole);
+        }
+    }
+    
 }
