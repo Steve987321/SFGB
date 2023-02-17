@@ -52,7 +52,8 @@ public class PlayerAnimationHandler : MonoBehaviour
 
         _animController.SetBool("isMoving", _playerMovement.IsMoving);
         _animController.SetBool("isAiming", _playerGunHandler.HasWeapon);
-
+        _animController.SetBool("isJumping", Input.GetKey(KeyCode.Space));
+        
         if (_playerGunHandler.HasWeapon) return; // don't punch when weapon is held
 
         // punch

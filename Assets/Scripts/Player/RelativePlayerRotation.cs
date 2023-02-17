@@ -5,9 +5,8 @@ using UnityEngine;
 public class RelativePlayerRotation : MonoBehaviour
 {
     public float RotationSpeed = 10;
-    
 
-    void Update()
+    private void LateUpdate()
     {
         // Get the direction of where the player should ahead in world space
         var hMoveDir = Camera.main.transform.right * Input.GetAxis("Horizontal");
