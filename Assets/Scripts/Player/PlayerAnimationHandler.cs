@@ -10,6 +10,9 @@ public class PlayerAnimationHandler : MonoBehaviour
     [Header("essential")]
     [SerializeField] private Transform _PlayerCenter;
 
+    [SerializeField] private Rigidbody _lHand;
+    [SerializeField] private Rigidbody _rHand;
+
     [Header("on aim")]
     [SerializeField] private Vector3 _aimRot;
 
@@ -17,8 +20,17 @@ public class PlayerAnimationHandler : MonoBehaviour
     private RelativePlayerMovement _playerMovement;
     private PlayerGunHandler _playerGunHandler;
 
-    private float PunchCooldown = 1.5f;
-    private bool random_hand = false;
+    private const float PunchCooldown = 1.5f;
+
+    /// <summary>
+    /// left: true right: false
+    /// </summary>
+    public bool HittingHand = false;
+
+    /// <summary>
+    /// A flag when the player is in a punch animation and should inflict damage
+    /// </summary>
+    public bool Punching = false;
     
     void Awake()
     {
@@ -49,9 +61,19 @@ public class PlayerAnimationHandler : MonoBehaviour
         // punch
         if (Input.GetKeyDown(KeyCode.Mouse0) && _punchTimer >= PunchCooldown)
         {
-            random_hand = !random_hand;
-            _animController.Play(random_hand ? "LPunch" : "RPunch");
+            HittingHand = !HittingHand;
+            _animController.Play(HittingHand ? "LPunch" : "RPunch");
+            StartCoroutine(_AddForce(HittingHand ? _lHand : _rHand));
             _punchTimer = 0;
         }
+    }
+
+    private IEnumerator _AddForce(Rigidbody rb)
+    {
+        yield return new WaitForSeconds(0.5f);
+        Punching = true;
+        rb.AddForce(_PlayerCenter.forward * 50, ForceMode.Impulse);
+        yield return new WaitForSeconds(0.5f);
+        Punching = false;
     }
 }

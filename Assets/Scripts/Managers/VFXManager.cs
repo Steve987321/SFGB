@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class VFXManager : MonoBehaviour
@@ -75,6 +76,20 @@ public class VFXManager : MonoBehaviour
         foreach (var col in colliders)
         {
             var rb = col.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.AddExplosionForce(force, at, radius);
+            }
+        }
+    }
+    public void apply_force(Vector3 at, float force, float radius, Rigidbody[] Exclude)
+    {
+        var colliders = Physics.OverlapSphere(at, radius);
+        foreach (var col in colliders)
+        {
+            var rb = col.GetComponent<Rigidbody>();
+            if (Exclude.Contains(rb)) continue;
+
             if (rb != null)
             {
                 rb.AddExplosionForce(force, at, radius);
