@@ -29,7 +29,7 @@ public class PlayerAnimationHandler : MonoBehaviour
 
     /// <summary>
     /// A flag when the player is in a punch animation and should inflict damage
-    /// </summary>
+    /// </summary> 
     public bool Punching = false;
     
     void Awake()

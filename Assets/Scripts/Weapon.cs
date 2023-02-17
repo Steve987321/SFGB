@@ -25,22 +25,16 @@ public class Weapon : MonoBehaviour
     }
 
     private bool _canShoot = false;
-    private bool _canReload = false;
 
-    /*[SerializeField]*/ private int _maxAmmo;
     [SerializeField] private Transform _endOfBarrel;
 
     [Tooltip("The FX that plays on shooting")]
     public gunFX[] GunFxs;
 
-    [Tooltip("The FX that plays on reloading")]
-    public gunFX[] GunReloadFxs;
-
     public WEAPON WeaponType = WEAPON.NONE;
     [Header("Weapon Stats")]
     public float Recoil;
     public float FireDelay;
-    public float ReloadDelay;
     public float Damage;
     public int Ammo;
 
@@ -55,17 +49,10 @@ public class Weapon : MonoBehaviour
         }
 
         _canShoot = true;
-        _maxAmmo = Ammo;
     }
 
     public void Shoot()
     {
-        if (Ammo == 0)
-        {
-            Reload();
-            return;
-        }
-
         if (_canShoot)
             StartCoroutine(_Shoot());
     }
@@ -91,30 +78,4 @@ public class Weapon : MonoBehaviour
         yield return new WaitForSeconds(FireDelay);
         _canShoot = true;
     }
-
-    public void Reload()
-    {
-        if (Ammo < _maxAmmo && _canReload)
-            StartCoroutine(_Reload());
-    }
-
-    private IEnumerator _Reload()
-    {
-        _canReload = false;
-
-        // reload animation
-        if (GunReloadFxs.Length != 0 )
-            foreach (var t in GunReloadFxs)
-            {
-                VFXManager.Instance.play_FX(t.Transform, t.Type);
-            }
-
-        yield return new WaitForSeconds(ReloadDelay);
-
-        Ammo = _maxAmmo;
-
-        _canReload = true;
-    }
-    
-    
 }
