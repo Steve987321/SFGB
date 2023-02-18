@@ -33,6 +33,10 @@ public class VFXManager : MonoBehaviour
     [SerializeField] private ParticleSystem _bigSparkHit;
 
     [Space] 
+    
+    [SerializeField] private Material[] _muzzleFlashMaterials;
+
+    [Space] 
 
     [SerializeField] private GameObject[] _metalHits;
     [SerializeField] private GameObject[] _woodHits;
@@ -101,13 +105,20 @@ public class VFXManager : MonoBehaviour
 
     public void play_smokepuff(Vector3 pos, Quaternion rot)
     {
+        var main = _smokeBig.main;
+        var col = main.startColor.color;
+        main.startColor = new Color(col.r, col.g, col.b, Random.Range(0f, 0.36f));
+        _smokeBig.GetComponent<ParticleSystemRenderer>().maxParticleSize = Random.Range(2f, 5f);
+        main.startRotationZ = Random.Range(0f, 1f);
         PlayParticleSystem(_smokeBig, pos, rot, 3);
     }
 
     public void play_muzzleflash(Vector3 pos, Quaternion rot)
     {
+        _muzzleFlash.GetComponent<Renderer>().material =
+            _muzzleFlashMaterials[Random.Range(0, _muzzleFlashMaterials.Length)];
+        play_smokepuff(pos, rot);
         PlayParticleSystem(_muzzleFlash, pos, rot, 3);
-        PlayParticleSystem(_smokeBig, pos, rot, 3);
         PlayParticleSystem(_smokeGun, pos, rot, 3);
         PlayParticleSystem(_sparks, pos, rot, 3);
     }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class Rocket : MonoBehaviour
 {
@@ -18,7 +20,8 @@ public class Rocket : MonoBehaviour
         timer += Time.deltaTime;
         if (timer > 7)
         {
-            Destroy(this.gameObject);
+            if (!gameObject.IsDestroyed())
+                Destroy(this.gameObject);
         }
         VFXManager.Instance.play_smokepuff(transform.position, transform.rotation);
     }
@@ -31,10 +34,11 @@ public class Rocket : MonoBehaviour
         }
         var hitcontact = col.GetContact(0).point;
         var hitnormal = col.GetContact(0).normal;
+        var relativePos = PlayerTransform.position - hitcontact;
 
         VFXManager.Instance.apply_force(hitcontact, 1200, 20);
         VFXManager.Instance.AddBulletHole(hitcontact, hitnormal, VFXManager.BULLET_HOLE_TYPE.EXPLOSION, col.transform);
-        VFXManager.Instance.play_sparkHitBig(hitcontact, Quaternion.LookRotation(PlayerTransform.rotation.eulerAngles));
+        VFXManager.Instance.play_sparkHitBig(hitcontact, Quaternion.LookRotation(relativePos, Vector3.up));
         Destroy(this.gameObject);
     }
 }

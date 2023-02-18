@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class Weapon : MonoBehaviour
 {
@@ -67,30 +68,49 @@ public class Weapon : MonoBehaviour
 
     public void Shoot()
     {
-        if (_canShoot)
+        if (_canShoot && Ammo > 0)
             StartCoroutine(_Shoot());
     }
 
     private IEnumerator _Shoot()
     {
         _canShoot = false;
+        Ammo--;
 
         Debug.DrawRay(_endOfBarrel.position, _endOfBarrel.forward, Color.red, 3);
-
+        bool rocketFlag = false;
         // Rocket has own hitscan function
         if (WeaponType == WEAPON.RPG)
         {
+            if (Physics.Raycast(_endOfBarrel.position, _endOfBarrel.forward, out var hit))
+            {
+                if (Helper.IsInReach(hit.point, _endOfBarrel.position, 10))
+                {
+                    var relativePos = _endOfBarrel.position - hit.point;
+                    VFXManager.Instance.apply_force(hit.point, 1200, 20);
+                    VFXManager.Instance.AddBulletHole(hit.point, hit.normal, VFXManager.BULLET_HOLE_TYPE.EXPLOSION, hit.transform.transform);
+                    VFXManager.Instance.play_sparkHitBig(hit.point, Quaternion.LookRotation(relativePos, Vector3.up));
+
+                    rocketFlag = true;
+                }
+            }
             var shotRocket = Instantiate(RocketObj);
             shotRocket.transform.SetPositionAndRotation(RocketObj.transform.position, RocketObj.transform.rotation);
             Destroy(RocketObj);
-            var rocket = shotRocket.AddComponent<Rocket>();
+            if (!rocketFlag)
+            {
+                var rocket = shotRocket.AddComponent<Rocket>();
+                rocket.PlayerTransform = transform;
+                rocket.ExcludeObj.AddRange(_rbInRoot);
+            }
             var rb = shotRocket.AddComponent<Rigidbody>();
             rb.mass = 0.5f;
             rb.useGravity = false;
             rb.AddForce(25 * -shotRocket.transform.forward, ForceMode.Impulse);
-            rocket.PlayerTransform = transform;
-            rocket.ExcludeObj.AddRange(_rbInRoot);
-
+            if (rocketFlag)
+            {
+                Destroy(shotRocket, 1);
+            }
             // destroy the rocket after some seconds in case nothing has been hit 
             //Destroy(rocket.gameObject, 7);
         }
@@ -103,7 +123,7 @@ public class Weapon : MonoBehaviour
                 HitScan(hit);
             }
         }
-        
+
         foreach (var t in GunFxs)
         {
             VFXManager.Instance.play_FX(t.Transform, t.Type);
