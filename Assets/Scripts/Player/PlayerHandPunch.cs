@@ -12,8 +12,8 @@ public class PlayerHandPunch : MonoBehaviour
     private const float _punchForce = 50f;
 
     private Rigidbody _rb;
-
-    private Rigidbody[] _excludeRb;
+     
+    private Rigidbody[] _excludeRb = new Rigidbody[19];
 
     void Start()
     {
@@ -21,12 +21,31 @@ public class PlayerHandPunch : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
     }
 
+    private bool _onceFlag = false;
+
     void FixedUpdate()
     {
-        if (!_animHandler.Punching) return;
-        if (_rb.velocity.magnitude > _punchHitThreshold)
+        if (!_animHandler.Punching)
+        {
+            _onceFlag = false;
+            return;
+        }
+        if (_rb.velocity.magnitude > _punchHitThreshold && !_onceFlag)
         {
             VFXManager.Instance.apply_force(transform.position, _punchForce * 10, 1, _excludeRb);
+            var colliders = Physics.OverlapSphere(transform.position, 0.5f);
+            foreach (var col in colliders)
+            {
+                if (_excludeRb.Contains(col.attachedRigidbody)) continue;
+                if (col.transform.root.TryGetComponent<Player>(out var player))
+                {
+                    player.DoDamage(2.5f);
+                    VFXManager.Instance.play_bloodSplatter(transform.position, transform.rotation);
+                    //VFXManager.Instance.play_FX(transform.position, transform.rotation, VFXManager.VFX_TYPE.BLOODHIT);
+                    _onceFlag = true;
+                    break;
+                }
+            }
         }
     }
 }

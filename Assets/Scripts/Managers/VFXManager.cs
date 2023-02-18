@@ -148,38 +148,37 @@ public class VFXManager : MonoBehaviour
         }
     }
 
-    public void AddBulletHole(Vector3 pos, Vector3 normal, BULLET_HOLE_TYPE type)
-    {
+    public void AddBulletHole(Vector3 pos, Vector3 normal, BULLET_HOLE_TYPE type, Transform trans)
+    { 
         var bHoleObj = type switch
         {
-            BULLET_HOLE_TYPE.GLASS => _glassHits[Random.Range(0, _glassHits.Length - 1)],
-            BULLET_HOLE_TYPE.METAL => _metalHits[Random.Range(0, _metalHits.Length - 1)],
-            BULLET_HOLE_TYPE.WOOD => _woodHits[Random.Range(0, _woodHits.Length - 1)],
-            BULLET_HOLE_TYPE.EXPLOSION => _metalHits[Random.Range(0, _metalHits.Length - 1)],
+            BULLET_HOLE_TYPE.GLASS => _glassHits[Random.Range(0, _glassHits.Length)],
+            BULLET_HOLE_TYPE.METAL => _metalHits[Random.Range(0, _metalHits.Length)],
+            BULLET_HOLE_TYPE.WOOD => _woodHits[Random.Range(0, _woodHits.Length)],
+            BULLET_HOLE_TYPE.EXPLOSION => _metalHits[Random.Range(0, _metalHits.Length)],
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
         var rot = Quaternion.FromToRotation(Vector3.up, normal);
-
-        if (type == BULLET_HOLE_TYPE.EXPLOSION)
+        var bHole = Instantiate(bHoleObj, pos + (normal * 0.01f), rot);
+        bHole.transform.parent = trans
+;       if (type == BULLET_HOLE_TYPE.EXPLOSION)
         {
             play_FX(pos, rot, VFX_TYPE.SPARKHITBIG);
-            _activeBulletHoles.Add(
-                Instantiate(bHoleObj, pos + (normal * 0.01f), rot)
-            );
         }
         else
         {
             play_FX(pos, rot, VFX_TYPE.SPARKHIT);
-            _activeBulletHoles.Add(
-                Instantiate(bHoleObj, pos + (normal * 0.01f), rot)
-            );
         }
+
+        _activeBulletHoles.Add(
+            bHole
+        );
     }
 
     public void AddBulletHole(RaycastHit hit, BULLET_HOLE_TYPE type)
     {
-        AddBulletHole(hit.point, hit.normal, type);
+        AddBulletHole(hit.point, hit.normal, type, hit.transform);
     }
 
     public void CleanBulletHoles()

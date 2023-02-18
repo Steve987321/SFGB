@@ -12,13 +12,14 @@ public class PlayerGunHandler : MonoBehaviour
 
     private GameObject _weapon;
     private float _gunRBMass;
+    private Rigidbody _gunHandRb;
 
     // whether the player has a weapon equipped
     public bool HasWeapon = false;
 
     void Start()
     {
-        
+        _gunHandRb = _gunHand.parent.GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -46,6 +47,7 @@ public class PlayerGunHandler : MonoBehaviour
 
                 f.tag = "Gun";
                 Destroy(_weapon);
+                _gunHandRb.mass = 1.0f;
                 HasWeapon = false;
             }
             
@@ -72,6 +74,7 @@ public class PlayerGunHandler : MonoBehaviour
             go.tag = "Untagged";
             Destroy(closestGun.gameObject);
             _weapon = go.gameObject;
+            _gunHandRb.mass = 0.2f;
             HasWeapon = true;
         }
     }

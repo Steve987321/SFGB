@@ -33,7 +33,7 @@ public class Rocket : MonoBehaviour
         var hitnormal = col.GetContact(0).normal;
 
         VFXManager.Instance.apply_force(hitcontact, 1200, 20);
-        VFXManager.Instance.AddBulletHole(hitcontact, hitnormal, VFXManager.BULLET_HOLE_TYPE.EXPLOSION);
+        VFXManager.Instance.AddBulletHole(hitcontact, hitnormal, VFXManager.BULLET_HOLE_TYPE.EXPLOSION, col.transform);
         VFXManager.Instance.play_sparkHitBig(hitcontact, Quaternion.LookRotation(PlayerTransform.rotation.eulerAngles));
         Destroy(this.gameObject);
     }
