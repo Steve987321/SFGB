@@ -70,6 +70,17 @@
     <Compile Include="Assets\Scripts\Player\PlayerAnimCopy.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerGunHandler.cs" />
     <Compile Include="Assets\Scripts\Helpers.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansTerrainTools.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansUtilities.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansBridgeLink.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMatertialUtils.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMeshUtils.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansDecalTools.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansImporterWindow.cs" />
+    <Compile Include="Assets\UnityPackages\JsonNetSample\JsonNetSample.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansTextureProcessor.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansImporter.cs" />
+    <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansPostProcess.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
