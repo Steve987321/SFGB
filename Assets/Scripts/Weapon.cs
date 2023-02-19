@@ -87,8 +87,11 @@ public class Weapon : MonoBehaviour
                 if (Helper.IsInReach(hit.point, _endOfBarrel.position, 10))
                 {
                     var relativePos = _endOfBarrel.position - hit.point;
+
+                    Rocket.DoRocketDamage(transform.root, hit.point);
+
                     VFXManager.Instance.apply_force(hit.point, 1200, 20);
-                    VFXManager.Instance.AddBulletHole(hit.point, hit.normal, VFXManager.BULLET_HOLE_TYPE.EXPLOSION, hit.transform.transform);
+                    VFXManager.Instance.add_bullet_hole(hit.point, hit.normal, VFXManager.BULLET_HOLE_TYPE.EXPLOSION, hit.transform.transform);
                     VFXManager.Instance.play_sparkHitBig(hit.point, Quaternion.LookRotation(relativePos, Vector3.up));
 
                     rocketFlag = true;
@@ -152,7 +155,7 @@ public class Weapon : MonoBehaviour
         }
 
 
-        VFXManager.Instance.AddBulletHole(hit, VFXManager.BULLET_HOLE_TYPE.METAL);
+        VFXManager.Instance.add_bullet_hole(hit, VFXManager.BULLET_HOLE_TYPE.METAL);
 
         return false;
     }

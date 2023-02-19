@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private float _health = 100;
+    [SerializeField] public float Health = 100f;
 
     public void DoDamage(float val)
     {
-        _health -= val;
-        if (_health < 0)
+        Health -= val;
+        if (Health < 0)
         {
-            _health = 0;
+            Health = 0;
             Die();
         }
     }

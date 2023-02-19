@@ -159,7 +159,7 @@ public class VFXManager : MonoBehaviour
         }
     }
 
-    public void AddBulletHole(Vector3 pos, Vector3 normal, BULLET_HOLE_TYPE type, Transform trans)
+    public void add_bullet_hole(Vector3 pos, Vector3 normal, BULLET_HOLE_TYPE type, Transform trans)
     { 
         var bHoleObj = type switch
         {
@@ -187,9 +187,9 @@ public class VFXManager : MonoBehaviour
         );
     }
 
-    public void AddBulletHole(RaycastHit hit, BULLET_HOLE_TYPE type)
+    public void add_bullet_hole(RaycastHit hit, BULLET_HOLE_TYPE type)
     {
-        AddBulletHole(hit.point, hit.normal, type, hit.transform);
+        add_bullet_hole(hit.point, hit.normal, type, hit.transform);
     }
 
     public void CleanBulletHoles()

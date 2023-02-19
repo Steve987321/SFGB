@@ -14,15 +14,12 @@ sysinfo.txt
 *.pidb.meta
 
 .vs/
-.log
 
 ###
 # VS/MD solution and project files
 ###
 [Ee]xportedObj/
 *.booproj
-*.csproj
-*.sln
 *.suo
 *.svd
 *.unityproj
