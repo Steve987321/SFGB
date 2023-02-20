@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class Helper
 {
@@ -73,5 +74,18 @@ public class Helper
         System.Array.Resize(ref transforms, count);
 
         return transforms;
+    }
+
+    public static Vector3 GetRandomPointOnPlane(Transform plane)
+    {
+        var x3 = plane.localScale.x * 3f;
+        var y3 = plane.localScale.y * 3f;
+
+        var x = Random.Range(-x3, x3);
+        var z = Random.Range(-y3, y3);
+
+        var randomPoint = new Vector3(x, plane.position.y, z);
+
+        return randomPoint;
     }
 }
