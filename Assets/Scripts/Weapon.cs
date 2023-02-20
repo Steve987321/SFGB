@@ -135,6 +135,9 @@ public class Weapon : MonoBehaviour
         // apply recoil
         VFXManager.Instance.apply_force(transform.position, Recoil * 100f, 2);
 
+        // apply cam shake
+        CameraManager.Instance.DoShake(0.2f, 3f, 1.5f);
+
         yield return new WaitForSeconds(FireDelay);
         if (WeaponType != WEAPON.RPG) _canShoot = true;
     }

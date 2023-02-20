@@ -349,19 +349,19 @@ MonoBehaviour:
       m_Value: 0
     opacityB:
       m_OverrideState: 1
-      m_Value: 0
+      m_Value: 1
     opacityA:
       m_OverrideState: 1
-      m_Value: 1
+      m_Value: 0
     rotation:
       m_OverrideState: 1
-      m_Value: 0
+      m_Value: 58
     tint:
       m_OverrideState: 1
       m_Value: {r: 1, g: 1, b: 1, a: 1}
     exposure:
       m_OverrideState: 1
-      m_Value: 1.1
+      m_Value: 1.35
     distortionMode:
       m_OverrideState: 1
       m_Value: 0
@@ -387,10 +387,10 @@ MonoBehaviour:
       m_Value: 0
     steps:
       m_OverrideState: 1
-      m_Value: 3
+      m_Value: 8
     thickness:
       m_OverrideState: 1
-      m_Value: 0.327
+      m_Value: 0
     castShadows:
       m_OverrideState: 1
       m_Value: 1

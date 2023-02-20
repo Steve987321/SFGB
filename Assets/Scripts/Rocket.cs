@@ -27,6 +27,24 @@ public class Rocket : MonoBehaviour
         VFXManager.Instance.play_smokepuff(transform.position, transform.rotation);
     }
 
+    void OnCollisionEnter(Collision col)
+    {
+        if (ExcludeObj.Contains(col.transform))
+        {
+            return;
+        }
+        var hitcontact = col.GetContact(0).point;
+        var hitnormal = col.GetContact(0).normal;
+        var relativePos = PlayerTransform.position - hitcontact;
+
+        DoRocketDamage(PlayerTransform, hitcontact);
+
+        VFXManager.Instance.apply_force(hitcontact, 1200, 20);
+        VFXManager.Instance.add_bullet_hole(hitcontact, hitnormal, VFXManager.BULLET_HOLE_TYPE.EXPLOSION, col.transform);
+        VFXManager.Instance.play_sparkHitBig(hitcontact, Quaternion.LookRotation(relativePos, Vector3.up));
+        Destroy(this.gameObject);
+    }
+
     public static void DoRocketDamage(Transform self, Vector3 point)
     {
         var collisionRoots = new List<Transform>();
@@ -38,23 +56,7 @@ public class Rocket : MonoBehaviour
                 player.DoDamage(collider.transform.root == self ? player.Health / 5f : player.Health / 2f);
                 collisionRoots.Add(collider.transform.root);
             }
-    }
 
-    void OnCollisionEnter(Collision col)
-    {
-        if (ExcludeObj.Contains(col.transform))
-        {
-            return;
-        }
-        var hitcontact = col.GetContact(0).point;
-        var hitnormal = col.GetContact(0).normal;
-        var relativePos = PlayerTransform.position - hitcontact;
-         
-        DoRocketDamage(PlayerTransform, hitcontact);
-
-        VFXManager.Instance.apply_force(hitcontact, 1200, 20);
-        VFXManager.Instance.add_bullet_hole(hitcontact, hitnormal, VFXManager.BULLET_HOLE_TYPE.EXPLOSION, col.transform);
-        VFXManager.Instance.play_sparkHitBig(hitcontact, Quaternion.LookRotation(relativePos, Vector3.up));
-        Destroy(this.gameObject);
+        CameraManager.Instance.DoShake(0.5f, 2f, 5);
     }
 }
