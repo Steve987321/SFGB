@@ -129,10 +129,10 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.461
+    m_Value: 0.37
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.103
+    m_Value: 0.245
   roundness:
     m_OverrideState: 1
     m_Value: 1
@@ -191,7 +191,7 @@ MonoBehaviour:
   active: 1
   quality:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 3
   enable:
     m_OverrideState: 1
     m_Value: 1
@@ -209,16 +209,16 @@ MonoBehaviour:
     m_Value: 1
   m_MaxRaySteps:
     m_OverrideState: 1
-    m_Value: 32
+    m_Value: 128
   m_DenoiseSS:
     m_OverrideState: 1
     m_Value: 1
   m_HalfResolutionDenoiserSS:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   m_DenoiserRadiusSS:
     m_OverrideState: 1
-    m_Value: 0.75
+    m_Value: 0.5
   m_SecondDenoiserPassSS:
     m_OverrideState: 1
     m_Value: 1
@@ -505,7 +505,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 7.0483837
+    m_Value: 6.5586104
   compensation:
     m_OverrideState: 1
     m_Value: 1
@@ -650,7 +650,7 @@ MonoBehaviour:
     m_Value: {x: 1, y: 1, z: 1, w: 0}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: 0.2152079}
+    m_Value: {x: 1, y: 1, z: 1, w: 0.33654258}
   gain:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0}
@@ -1229,7 +1229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9008a067f4d626c4d8bc4bc48f04bb89, type: 3}
   m_Name: AmbientOcclusion
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 1
     m_Value: 1
@@ -1238,13 +1238,13 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.47
+    m_Value: 1.07
   directLightingStrength:
     m_OverrideState: 1
     m_Value: 0.201
   radius:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 1.2
   spatialBilateralAggressiveness:
     m_OverrideState: 1
     m_Value: 0.15

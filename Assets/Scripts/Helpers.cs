@@ -78,13 +78,13 @@ public class Helper
 
     public static Vector3 GetRandomPointOnPlane(Transform plane)
     {
-        var x3 = plane.localScale.x * 3f;
-        var y3 = plane.localScale.y * 3f;
+        var x3 = plane.localScale.x * 2f;
+        var z3 = plane.localScale.z * 2f;
 
         var x = Random.Range(-x3, x3);
-        var z = Random.Range(-y3, y3);
+        var z = Random.Range(-z3, z3);
 
-        var randomPoint = new Vector3(x, plane.position.y, z);
+        var randomPoint = new Vector3(plane.position.x + x, plane.position.y, plane.position.z + z);
 
         return randomPoint;
     }

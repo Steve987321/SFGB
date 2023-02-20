@@ -1127,6 +1127,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7601990154780389922}
   - component: {fileID: 7597287387769722230}
+  - component: {fileID: -6825096905743746325}
+  - component: {fileID: 7935909274520981239}
   m_Layer: 0
   m_Name: Car_3
   m_TagString: Untagged
@@ -1178,6 +1180,31 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-6825096905743746325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7596206201356314258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5256f9157039fdd4eb580abf44fa841f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &7935909274520981239
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7596206201356314258}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.4416412, z: 2.1870792}
+  m_Center: {x: 6.727966e-16, y: 0.31661952, z: -0.040725894}
 --- !u!1 &7596237958420972966
 GameObject:
   m_ObjectHideFlags: 0

@@ -65,25 +65,26 @@
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansUtilities.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerHandGrips.cs" />
     <Compile Include="Assets\Scripts\Player\RelativePlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Managers\CarManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansBridgeLink.cs" />
     <Compile Include="Assets\Scripts\Managers\VFXManager.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansDecalTools.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAnimationHandler.cs" />
     <Compile Include="Assets\Scripts\Weapon.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMatertialUtils.cs" />
+    <Compile Include="Assets\Scripts\Managers\WeaponManager.cs" />
     <Compile Include="Assets\Scripts\Rocket.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansTextureProcessor.cs" />
     <Compile Include="Assets\Scripts\Player\RelativePlayerRotation.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerHandPunch.cs" />
     <Compile Include="Assets\UnityPackages\JsonNetSample\JsonNetSample.cs" />
+    <Compile Include="Assets\Scripts\Car.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAnimCopy.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansTerrainTools.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerGunHandler.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMeshUtils.cs" />
     <Compile Include="Assets\Scripts\Helpers.cs" />
-    <Compile Include="Assets\Scripts\Managers\CarManager.cs" />
-    <Compile Include="Assets\Scripts\Managers\CameraManager.cs" />
-    <Compile Include="Assets\Scripts\Managers\WeaponManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

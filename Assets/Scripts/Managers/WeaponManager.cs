@@ -21,7 +21,7 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private GameObject[] _weapons;
 
     // will determine the location and bounds of where to spawn weapons
-    [SerializeField] private Transform SpawnPlane;
+    [SerializeField] private Transform[] SpawnPlanes;
 
     // dynamic list of all the weapons that are in the scene
     private List<Weapon> _activeWeapons;
@@ -52,7 +52,9 @@ public class WeaponManager : MonoBehaviour
         {
             int f = Random.Range(0, _weapons.Length);
             var weapon = Instantiate(_weapons[f]);
-            weapon.transform.position = Helper.GetRandomPointOnPlane(SpawnPlane);
+            weapon.transform.position = Helper.GetRandomPointOnPlane(
+                SpawnPlanes.Length == 1 ? SpawnPlanes[0] : SpawnPlanes[Random.Range(0, SpawnPlanes.Length)]
+                );
         }
     }
 
@@ -63,6 +65,11 @@ public class WeaponManager : MonoBehaviour
         foreach (var weapon in _activeWeapons)
         {
             if (weapon.transform.parent == null && weapon.Ammo <= 0)
+            {
+                Destroy(weapon.gameObject);
+            }
+
+            if (weapon.transform.position.y < -100)
             {
                 Destroy(weapon.gameObject);
             }
