@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6093084192431459535}
   m_Layer: 0
   m_Name: Stock_01
-  m_TagString: Untagged
+  m_TagString: Gun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 6093084191556002434}
   m_Layer: 0
   m_Name: Magazin
-  m_TagString: Untagged
+  m_TagString: Gun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -501,6 +501,8 @@ MonoBehaviour:
   - Type: 1
     Transform: {fileID: 6093084191220549032}
   WeaponType: 6
+  RocketObj: {fileID: 0}
+  RocketSpeed: 10
   Recoil: 2
   FireDelay: 0.05
   Damage: 5

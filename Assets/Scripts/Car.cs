@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Car : MonoBehaviour
@@ -19,7 +20,15 @@ public class Car : MonoBehaviour
 
         if (other.name.Contains("Rock", StringComparison.OrdinalIgnoreCase))
             other.attachedRigidbody.AddExplosionForce(5000f, transform.position, 50f);
-        VFXManager.Instance.apply_force(transform.position, 3000f, 7f);
-        CameraManager.Instance.DoShake(0.3f, 2f, 0.7f);
+
+        var ignore = new List<Rigidbody>();
+        foreach (var weapon in FindObjectsOfType<Weapon>())
+        {
+            if (weapon.TryGetComponent<Rigidbody>(out var rb))
+                ignore.Add(rb);
+        }
+
+        VFXManager.Instance.apply_force(transform.position, 3000f, 7f, ignore.ToArray());
+        CameraManager.Instance.DoShake(0.3f, 16f);
     }
 }

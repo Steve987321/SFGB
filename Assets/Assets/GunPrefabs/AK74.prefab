@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 1579305737400955038}
   m_Layer: 0
   m_Name: Mag
-  m_TagString: Untagged
+  m_TagString: Gun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -381,6 +381,8 @@ MonoBehaviour:
   - Type: 1
     Transform: {fileID: 1579305735922794266}
   WeaponType: 1
+  RocketObj: {fileID: 0}
+  RocketSpeed: 10
   Recoil: 6.48
   FireDelay: 0.3
   Damage: 5

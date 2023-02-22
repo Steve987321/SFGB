@@ -26,7 +26,7 @@ public class PlayerGunHandler : MonoBehaviour
     {
         if (!HasWeapon)
         {
-            pickUpGunHandler();
+            PickUpGunHandler();
         }
         else
         {
@@ -54,9 +54,11 @@ public class PlayerGunHandler : MonoBehaviour
         }
     }
 
-    private void pickUpGunHandler()
+    private void PickUpGunHandler()
     {
-        var transforms = GameObject.FindGameObjectsWithTag("Gun").Select(gun => gun.transform);
+        // TODO: ..
+        var transforms = GameObject.FindGameObjectsWithTag("Gun").Where(gun => gun.transform.parent == null).Select(gun => gun.transform);
+
         var closestGun = Helper.GetClosest(transform, transforms.ToArray());
         if (closestGun == null) return;
         if (!Helper.IsInReach(closestGun.position, transform.position, 3.0f)) return;
@@ -66,10 +68,13 @@ public class PlayerGunHandler : MonoBehaviour
             _gunRBMass = closestGun.GetComponent<Rigidbody>().mass;
 
             var go = Instantiate(closestGun);
+
             Destroy(go.GetComponent<Rigidbody>());
             go.SetPositionAndRotation(_gunHand.position, _gunHand.rotation);
+
             if (go.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG)
                 go.rotation *= Quaternion.Euler(-4.9f, -20.8f, 0.0f);
+
             go.parent = _gunHand;
             go.tag = "Untagged";
             Destroy(closestGun.gameObject);
