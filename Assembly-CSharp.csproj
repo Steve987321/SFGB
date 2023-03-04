@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerGunHandler.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMeshUtils.cs" />
     <Compile Include="Assets\Scripts\Helpers.cs" />
+    <Compile Include="Assets\Scripts\AmbientCamShake.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
