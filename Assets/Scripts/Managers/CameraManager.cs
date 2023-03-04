@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CameraManager : MonoBehaviour
 {
@@ -8,6 +10,10 @@ public class CameraManager : MonoBehaviour
 
     public float ShakeAmplitude = 1.0f;
     public float ShakeSpeed = 1.0f;
+
+    public bool AmbientShake = false;
+    public float AmbientShakeAmp = 1.0f;
+    public float AmbientShakeSpeed = 1.0f;
 
     private Camera _camera;
 
@@ -29,20 +35,35 @@ public class CameraManager : MonoBehaviour
     {
         if (_shakeTimer > 0)
         {
+
             var offset = Quaternion.Euler(
                 Random.Range(-1f, 1f) * ShakeAmplitude,
                 Random.Range(-1f, 1f) * ShakeAmplitude,
                 Random.Range(-1f, 1f) * ShakeAmplitude
             );
 
-            _camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, _camera.transform.rotation * offset, Time.deltaTime * ShakeSpeed);
+            _camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, _ogRot * offset, Time.deltaTime * ShakeSpeed);
             _shakeTimer -= Time.deltaTime;
         }
         else
         {
-            _camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, _ogRot, Time.deltaTime * ShakeSpeed); ;
-        }
+            if (AmbientShake)
+            {
+                float elapsedTime = Time.time * AmbientShakeSpeed;
+                float x = Mathf.PerlinNoise(elapsedTime, 0) * 2 - 1;
+                float y = Mathf.PerlinNoise(0, elapsedTime) * 2 - 1;
 
+                var offset = Quaternion.Euler(
+                    x * AmbientShakeAmp,
+                    y * AmbientShakeAmp,
+                    x * AmbientShakeAmp
+                );
+
+                _camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, _ogRot * offset, Time.deltaTime * AmbientShakeSpeed);
+            }
+            else
+                _camera.transform.rotation = Quaternion.Lerp(_camera.transform.rotation, _ogRot, Time.deltaTime * ShakeSpeed); ;
+        }
     }
 
     /// <summary>
