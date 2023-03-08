@@ -9,6 +9,7 @@ using Debug = UnityEngine.Debug;
 public class PlayerGunHandler : MonoBehaviour
 {
     [SerializeField] private Transform _gunHand;
+    [SerializeField] private GameObject _laserPrefab;
 
     private GameObject _weapon;
     private float _gunRBMass;
@@ -37,6 +38,15 @@ public class PlayerGunHandler : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.G)) // drop
             {
                 Debug.Log("throwing away a gun");
+
+                foreach (Transform t in _weapon.transform)
+                {
+                    if (!t.CompareTag("GunUtil")) continue;
+
+                    if (t.TryGetComponent<Light>(out var l))
+                        l.enabled = false;
+                }
+
                 var f = Instantiate(_weapon);
 
                 f.transform.localScale = _weapon.GetComponent<Weapon>().gameObject.transform.lossyScale;
@@ -56,7 +66,6 @@ public class PlayerGunHandler : MonoBehaviour
 
     private void PickUpGunHandler()
     {
-        // TODO: ..
         var transforms = GameObject.FindGameObjectsWithTag("Gun").Where(gun => gun.transform.parent == null).Select(gun => gun.transform);
 
         var closestGun = Helper.GetClosest(transform, transforms.ToArray());
@@ -74,6 +83,14 @@ public class PlayerGunHandler : MonoBehaviour
 
             if (go.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG)
                 go.rotation *= Quaternion.Euler(-4.9f, -20.8f, 0.0f);
+
+            foreach (Transform t in go.transform)
+            {
+                if (!t.CompareTag("GunUtil")) continue;
+
+                if (t.TryGetComponent<Light>(out var l))
+                    l.enabled = true;
+            }
 
             go.parent = _gunHand;
             go.tag = "Untagged";

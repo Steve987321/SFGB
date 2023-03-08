@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Prop
   - Gun
+  - GunUtil
   layers:
   - Default
   - TransparentFX
