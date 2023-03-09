@@ -42,8 +42,6 @@ public class Weapon : MonoBehaviour
     [Header("set this when RPG is the weapon type")]
     [SerializeField] private GameObject RocketObj;
 
-    public float RocketSpeed = 10;
-
     [Header("Weapon Stats")]
     public float Recoil;
     public float FireDelay;

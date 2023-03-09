@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// handles the weapons in the current scene
@@ -17,6 +18,9 @@ public class WeaponManager : MonoBehaviour
     // when there are more weapons then this number it will not spawn anymore weapons
     public int MaxWeapons = 10;
 
+    // what icon to show when showing loaded weapons in scene
+    [SerializeField] private GameObject _icon;
+
     // weapon prefabs 
     [SerializeField] private GameObject[] _weapons;
 
@@ -26,11 +30,47 @@ public class WeaponManager : MonoBehaviour
     // dynamic list of all the weapons that are in the scene
     private List<Weapon> _activeWeapons;
 
+    private Transform _canvas;
+
     private float _timer = 0;
+
+    private float _iconTimer = 0;
+
+    void Awake()
+    {
+        if (!_icon.TryGetComponent<Image>(out _))
+        {
+            Debug.LogError("the Icon gameobject doesn't have image component!!");
+        }
+
+        _canvas = _icon.transform.root;
+    }
 
     void Update()
     {
         _activeWeapons = FindObjectsOfType<Weapon>(false).ToList();
+
+        // show where loaded guns are 
+        if (Input.GetKeyDown(KeyCode.H) && _iconTimer <= 0)
+        {
+            foreach (var weapon in _activeWeapons)
+            {
+                if (weapon.CompareTag("Gun") && weapon.Ammo > 0)
+                {
+                    var screenpoint = Camera.main.WorldToScreenPoint(weapon.transform.position);
+                    var go = Instantiate(_icon, _canvas);
+                    go.GetComponent<Image>().rectTransform.position = screenpoint;
+                    go.GetComponent<Animator>().Play("GunIndicator");
+                    Destroy(go, 1f);
+                }
+            }
+
+            _iconTimer = 0.5f;
+        }
+
+        if (_iconTimer > 0)
+            _iconTimer -= Time.deltaTime;
+
         if (!CanSpawnWeapons) return;
 
         if (_timer > WeaponSpawnFrequency)
