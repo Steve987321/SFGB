@@ -82,7 +82,7 @@ public class Weapon : MonoBehaviour
         {
             if (Physics.Raycast(_endOfBarrel.position, _endOfBarrel.forward, out var hit))
             {
-                if (Helper.IsInReach(hit.point, _endOfBarrel.position, 10))
+                if (Helper.IsInReach(hit.point, _endOfBarrel.position, 20))
                 {
                     var relativePos = _endOfBarrel.position - hit.point;
 

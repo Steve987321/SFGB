@@ -74,19 +74,28 @@
     <Compile Include="Assets\Scripts\Player\PlayerAnimationHandler.cs" />
     <Compile Include="Assets\Scripts\Weapon.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMatertialUtils.cs" />
+    <Compile Include="Assets\Assets\3rdParty\AssetStore\RainMaker\Prefab\RainCollision.cs" />
+    <Compile Include="Assets\Assets\3rdParty\AssetStore\RainMaker\Prefab\BaseRainScript.cs" />
     <Compile Include="Assets\Scripts\Managers\WeaponManager.cs" />
     <Compile Include="Assets\Scripts\Rocket.cs" />
+    <Compile Include="Assets\Assets\3rdParty\AssetStore\RainMaker\Prefab\RainScript.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansTextureProcessor.cs" />
     <Compile Include="Assets\Scripts\Player\RelativePlayerRotation.cs" />
+    <Compile Include="Assets\Scripts\Managers\ContainerShipEvents.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerHandPunch.cs" />
     <Compile Include="Assets\UnityPackages\JsonNetSample\JsonNetSample.cs" />
     <Compile Include="Assets\Scripts\Car.cs" />
     <Compile Include="Assets\OutOfViewArrow.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAnimCopy.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansTerrainTools.cs" />
+    <Compile Include="Assets\Assets\3rdParty\AssetStore\RainMaker\Prefab\RainScript2D.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerGunHandler.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMeshUtils.cs" />
     <Compile Include="Assets\Scripts\Helpers.cs" />
+    <Compile Include="Assets\PlayerAiming.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Assets\3rdParty\AssetStore\RainMaker\Prefab\RainShader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -9,6 +9,7 @@ public class RelativePlayerMovement : MonoBehaviour
     /// </summary>
     public bool IsMoving = false;
 
+
     private void Update()
     {
         var horizontal = Input.GetAxis("Horizontal");

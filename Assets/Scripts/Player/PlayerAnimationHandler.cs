@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerAnimationHandler : MonoBehaviour
 {
-    [Header("essential")]
     [SerializeField] private Transform _PlayerCenter;
 
     [SerializeField] private Rigidbody _lHand;
@@ -19,8 +20,10 @@ public class PlayerAnimationHandler : MonoBehaviour
 
     private const float PunchCooldown = 1.5f;
 
+    public bool AssistAiming = true;
+
     /// <summary>
-    /// left: true right: false
+    /// true=left false=right
     /// </summary>
     public bool HittingHand = false;
 
@@ -39,7 +42,6 @@ public class PlayerAnimationHandler : MonoBehaviour
 
         _playerGunHandler = _PlayerCenter.GetComponent<PlayerGunHandler>();
         Debug.Assert(_playerGunHandler != null, "player gun handler is null");
-
     }
 
     private float _punchTimer = 0;
@@ -53,7 +55,7 @@ public class PlayerAnimationHandler : MonoBehaviour
         _animController.SetBool("isMoving", _playerMovement.IsMoving);
         _animController.SetBool("isAiming", _playerGunHandler.HasWeapon);
         _animController.SetBool("isJumping", Input.GetKey(KeyCode.Space));
-        
+
         if (_playerGunHandler.HasWeapon) return; // don't punch when weapon is held
 
         // punch

@@ -173,14 +173,8 @@ public class VFXManager : MonoBehaviour
         var rot = Quaternion.FromToRotation(Vector3.up, normal);
         var bHole = Instantiate(bHoleObj, pos + (normal * 0.01f), rot);
         bHole.transform.parent = trans
-;       if (type == BULLET_HOLE_TYPE.EXPLOSION)
-        {
-            play_FX(pos, rot, VFX_TYPE.SPARKHITBIG);
-        }
-        else
-        {
-            play_FX(pos, rot, VFX_TYPE.SPARKHIT);
-        }
+;
+        play_FX(pos, rot, type == BULLET_HOLE_TYPE.EXPLOSION ? VFX_TYPE.SPARKHITBIG : VFX_TYPE.SPARKHIT);
 
         _activeBulletHoles.Add(
             bHole

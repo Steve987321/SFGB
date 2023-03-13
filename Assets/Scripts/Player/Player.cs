@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
 
     }
 
-    void Die()
+    private void Die()
     {
         var rbs = Helper.GetAllRigidBodiesInChildren(gameObject);
         foreach (var rb in rbs)
