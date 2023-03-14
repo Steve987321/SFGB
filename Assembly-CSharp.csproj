@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\AmbientCamShake.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerHandsRotation.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansImporterWindow.cs" />
+    <Compile Include="Assets\PlayerAiming.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansUtilities.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerHandGrips.cs" />
@@ -92,7 +93,6 @@
     <Compile Include="Assets\Scripts\Player\PlayerGunHandler.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMeshUtils.cs" />
     <Compile Include="Assets\Scripts\Helpers.cs" />
-    <Compile Include="Assets\PlayerAiming.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Assets\3rdParty\AssetStore\RainMaker\Prefab\RainShader.shader" />

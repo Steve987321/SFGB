@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class ContainerShipEvents : MonoBehaviour
 {
-    public float LightningChance = 10;
 
-    [SerializeField] private ParticleSystem[] _waterSplash;
+    [SerializeField] private ParticleSystem[] _waterSplashFX;
     [SerializeField] private Transform[] _waterSplashPoints;
 
+    [Space]
+
+    public float LightningChance = 10;
     [SerializeField] private Transform _lightningBoltArea;
     [SerializeField] private GameObject _lightningBolt;
 
@@ -32,10 +34,12 @@ public class ContainerShipEvents : MonoBehaviour
 
     IEnumerator PlayLightningStrike()
     {
+        float randAngle = Random.Range(-20, 20);
         _lightningBolt.transform.position = Helper.GetRandomPointOnPlane(_lightningBoltArea);
+        _lightningBolt.transform.rotation = Quaternion.Euler(randAngle, randAngle, randAngle);
         _lightningBolt.SetActive(true);
 
-        yield return new WaitForSeconds(0.1f); // show bolt for 0.1 seconds
+        yield return new WaitForSeconds(0.2f); // show bolt for 0.1 seconds
 
         _lightningBolt.SetActive(false);
     }
@@ -45,13 +49,14 @@ public class ContainerShipEvents : MonoBehaviour
      */
     void WaterSplash()
     {
-        var point = _waterSplashPoints[Random.Range(0, _waterSplashPoints.Length)];
-        foreach (var splash in _waterSplash)
+        var point = _waterSplashPoints[Random.Range(0, _waterSplashPoints.Length - 1)];
+        foreach (var splash in _waterSplashFX)
         {
             var go = Instantiate(splash.gameObject);
+            go.SetActive(true);
             go.transform.SetPositionAndRotation(point.position, point.rotation);
             go.GetComponent<ParticleSystem>().Play();
-            Destroy(go, 3f);
+            Destroy(go, 4);
         }
     }
 }
