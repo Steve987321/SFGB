@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Experimental.AI;
+using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 
 public class VFXManager : MonoBehaviour
@@ -49,7 +51,7 @@ public class VFXManager : MonoBehaviour
 
     private List<GameObject> _activeBulletHoles = new();
 
-    public static VFXManager Instance;
+    public static VFXManager Instance { get; private set; }
 
     void Awake()
     {
@@ -192,6 +194,25 @@ public class VFXManager : MonoBehaviour
         {
             Destroy(bullethole);
         }
+    }
+
+    /*
+     * applies spherical damage to players within the radius
+     */
+    public void apply_radius_damage(Vector3 at, float radius, float damage)
+    {
+        // a copy from rocket.cs with different parameters
+        var collisionRoots = new List<Transform>();
+
+        foreach (var collider in Physics.OverlapSphere(at, radius))
+            if (collider.transform.root.TryGetComponent<Player>(out var player)
+                && !collisionRoots.Contains(collider.transform.root))
+            {
+                player.DoDamage(damage);
+                collisionRoots.Add(collider.transform.root);
+            }
+
+        CameraManager.Instance.DoShake(0.5f, 2f, 5);
     }
     
 }
