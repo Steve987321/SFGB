@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    // how many players alive in current scene
+    private int _playersAlive;
+
     void Awake()
     {
         Instance = this;
@@ -16,9 +19,13 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    void Update()
+    void LateUpdate()
     {
-        
+        // last man standing 
+        if (_playersAlive == 1)
+        {
+
+        }
     }
 
 }

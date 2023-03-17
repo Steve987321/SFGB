@@ -1,10 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
+/*
+ * handles the continous events on the container ship map
+ */
 public class ContainerShipEvents : MonoBehaviour
 {
 
@@ -49,8 +49,7 @@ public class ContainerShipEvents : MonoBehaviour
 
     IEnumerator PlayLightningStrike()
     {
-        // show warning
-
+        // show warning circle
         var randomPos = Helper.GetRandomPointOnPlane(_lightningBoltArea);
         var warningobj = Instantiate(_warning);
         warningobj.transform.SetPositionAndRotation(randomPos, Quaternion.identity);
@@ -80,6 +79,7 @@ public class ContainerShipEvents : MonoBehaviour
 
         VFXManager.Instance.apply_force(randomPos, 3000, LightningBoltRadius);   
         VFXManager.Instance.apply_radius_damage(randomPos, LightningBoltRadius, LightningBoltDamage);
+        VFXManager.Instance.play_sparkHitBig(randomPos, Quaternion.identity);
 
         yield return new WaitForSeconds(0.15f); // show bolt for 0.15 seconds
 
@@ -87,7 +87,6 @@ public class ContainerShipEvents : MonoBehaviour
     }
 
     
-
     /*
      * plays a water splash on random side of the container ship (front or back side)
      */

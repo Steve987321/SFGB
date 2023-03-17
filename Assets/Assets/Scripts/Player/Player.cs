@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] public float Health = 100f;
+    public float Health = 100f;
 
     public void DoDamage(float val)
     {
@@ -15,11 +15,12 @@ public class Player : MonoBehaviour
         }
 
         // cam shake on damage to any player
-
         CameraManager.Instance.DoShake(0.3f, 3f, 0.7f);
-
     }
 
+    /*
+     * turn player in ragdoll 
+     */
     private void Die()
     {
         var rbs = Helper.GetAllRigidBodiesInChildren(gameObject);

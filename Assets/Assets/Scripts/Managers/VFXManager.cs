@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Experimental.AI;
-using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 
 public class VFXManager : MonoBehaviour
@@ -16,7 +12,6 @@ public class VFXManager : MonoBehaviour
         MUZZLEFLASH,
         SPARKHITBIG,
         SPARKHIT,
-
         BLOODHIT,
     }
 
@@ -134,6 +129,7 @@ public class VFXManager : MonoBehaviour
     {
         PlayParticleSystem(_sparks, pos, rot, 3);
     }
+
     public void apply_force(Vector3 at, float force, float radius)
     {
         var colliders = Physics.OverlapSphere(at, radius);
@@ -142,7 +138,7 @@ public class VFXManager : MonoBehaviour
             var rb = col.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.AddExplosionForce(force, at, radius);
+                rb.AddExplosionForce(force, at, radius, 1, ForceMode.Force);
             }
         }
     }
@@ -156,7 +152,7 @@ public class VFXManager : MonoBehaviour
 
             if (rb != null)
             {
-                rb.AddExplosionForce(force, at, radius);
+                rb.AddExplosionForce(force, at, radius, 1, ForceMode.Force);
             }
         }
     }
@@ -169,7 +165,6 @@ public class VFXManager : MonoBehaviour
             BULLET_HOLE_TYPE.METAL => _metalHits[Random.Range(0, _metalHits.Length)],
             BULLET_HOLE_TYPE.WOOD => _woodHits[Random.Range(0, _woodHits.Length)],
             BULLET_HOLE_TYPE.EXPLOSION => _metalHits[Random.Range(0, _metalHits.Length)],
-            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
         var rot = Quaternion.FromToRotation(Vector3.up, normal);
@@ -178,9 +173,7 @@ public class VFXManager : MonoBehaviour
 ;
         play_FX(pos, rot, type == BULLET_HOLE_TYPE.EXPLOSION ? VFX_TYPE.SPARKHITBIG : VFX_TYPE.SPARKHIT);
 
-        _activeBulletHoles.Add(
-            bHole
-        );
+        _activeBulletHoles.Add(bHole);
     }
 
     public void add_bullet_hole(RaycastHit hit, BULLET_HOLE_TYPE type)
