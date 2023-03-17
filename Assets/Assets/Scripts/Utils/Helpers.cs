@@ -88,4 +88,10 @@ public class Helper
 
         return randomPoint;
     }
+
+    public static void Swap<T>(IList<T> list, int indexA, int indexB)
+    {
+        (list[indexB], list[indexA]) = (list[indexA], list[indexB]);
+    }
+ 
 }

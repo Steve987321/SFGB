@@ -28,4 +28,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void OnGUI()
+    {
+        GUI.Label(new Rect(0, 0, 100, 100), (1 / Time.smoothDeltaTime).ToString());
+    }
+
 }

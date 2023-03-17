@@ -4,6 +4,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float Health = 100f;
+    [SerializeField] private Transform _activePlayer;
 
     public void DoDamage(float val)
     {

@@ -25,7 +25,7 @@ public class ContainerShipEvents : MonoBehaviour
 
     [SerializeField] private Transform _lightningBoltArea;
     [SerializeField] private GameObject _lightningBolt;
-    [SerializeField] private GameObject _warning;
+    [SerializeField] private GameObject _warningObj;
     [SerializeField] private TextMeshPro _countdownTimerObj;
 
     private float _countdownTimer = 0;
@@ -51,13 +51,13 @@ public class ContainerShipEvents : MonoBehaviour
     {
         // show warning circle
         var randomPos = Helper.GetRandomPointOnPlane(_lightningBoltArea);
-        var warningobj = Instantiate(_warning);
-        warningobj.transform.SetPositionAndRotation(randomPos, Quaternion.identity);
+        _warningObj.SetActive(true);
+        _warningObj.transform.SetPositionAndRotation(randomPos, Quaternion.identity);
 
         _countdownTimer = LightningWarningTime;
 
-        var countdownObj = Instantiate(_countdownTimerObj);
-        countdownObj.transform.SetPositionAndRotation(randomPos + new Vector3(0, 0.5f, 0), Quaternion.Euler(60, 0, 0));
+         _countdownTimerObj.gameObject.SetActive(true);
+        _countdownTimerObj.transform.SetPositionAndRotation(randomPos + new Vector3(0, 0.5f, 0), Quaternion.Euler(60, 0, 0));
         
         // give player time to move and show timer
         while (_countdownTimer >= 0)
@@ -65,13 +65,13 @@ public class ContainerShipEvents : MonoBehaviour
             var halfradius = LightningBoltRadius / 2;
             Debug.DrawLine(randomPos + new Vector3(-halfradius, -halfradius, -halfradius), randomPos + new Vector3(halfradius, halfradius, halfradius));
 
-            countdownObj.text = _countdownTimer.ToString("N1");
+            _countdownTimerObj.text = _countdownTimer.ToString("N1");
             _countdownTimer -= Time.deltaTime;
             yield return null;
         }
 
-        Destroy(warningobj);
-        Destroy(countdownObj.gameObject);
+        _warningObj.SetActive(false);
+        _countdownTimerObj.gameObject.SetActive(false);
 
         float randAngle = Random.Range(-20, 20);
         _lightningBolt.transform.SetPositionAndRotation(randomPos, Quaternion.Euler(randAngle, randAngle, randAngle));

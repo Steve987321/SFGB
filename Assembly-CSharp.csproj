@@ -76,6 +76,7 @@
     <Compile Include="Assets\Assets\Scripts\Weapon.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMatertialUtils.cs" />
     <Compile Include="Assets\Assets\3rdParty\AssetStore\RainMaker\Prefab\RainCollision.cs" />
+    <Compile Include="Assets\Assets\Scripts\PlayerResetZone.cs" />
     <Compile Include="Assets\Assets\3rdParty\AssetStore\RainMaker\Prefab\BaseRainScript.cs" />
     <Compile Include="Assets\Assets\Scripts\Managers\WeaponManager.cs" />
     <Compile Include="Assets\Assets\Scripts\Rocket.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Assets\Assets\Scripts\Player\PlayerGunHandler.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMeshUtils.cs" />
     <Compile Include="Assets\Assets\Scripts\Utils\Helpers.cs" />
+    <Compile Include="Assets\Assets\Scripts\Utils\Pooler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

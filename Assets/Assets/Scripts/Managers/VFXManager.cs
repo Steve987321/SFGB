@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Pool;
 using Random = UnityEngine.Random;
 
 public class VFXManager : MonoBehaviour
@@ -36,21 +37,27 @@ public class VFXManager : MonoBehaviour
     [Space] 
 
     [SerializeField] private GameObject[] _metalHits;
-    [SerializeField] private GameObject[] _woodHits;
-    [SerializeField] private GameObject[] _glassHits;
 
     [Space]
     
     [SerializeField] private ParticleSystem _bloodSplatter;
     [SerializeField] private ParticleSystem _bloodMist;
 
-    private List<GameObject> _activeBulletHoles = new();
+    private Pooler _bulletHolePool = new();
 
     public static VFXManager Instance { get; private set; }
 
     void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
+        _bulletHolePool.use_array = true;
+        _bulletHolePool.pooledObjectArray = _metalHits;
+        _bulletHolePool.PoolSize = 20;
+        _bulletHolePool.CreatePool();
     }
 
     public void play_FX(Vector3 pos, Quaternion rot, VFX_TYPE type)
@@ -158,35 +165,19 @@ public class VFXManager : MonoBehaviour
     }
 
     public void add_bullet_hole(Vector3 pos, Vector3 normal, BULLET_HOLE_TYPE type, Transform trans)
-    { 
-        var bHoleObj = type switch
-        {
-            BULLET_HOLE_TYPE.GLASS => _glassHits[Random.Range(0, _glassHits.Length)],
-            BULLET_HOLE_TYPE.METAL => _metalHits[Random.Range(0, _metalHits.Length)],
-            BULLET_HOLE_TYPE.WOOD => _woodHits[Random.Range(0, _woodHits.Length)],
-            BULLET_HOLE_TYPE.EXPLOSION => _metalHits[Random.Range(0, _metalHits.Length)],
-        };
-
+    {
         var rot = Quaternion.FromToRotation(Vector3.up, normal);
-        var bHole = Instantiate(bHoleObj, pos + (normal * 0.01f), rot);
-        bHole.transform.parent = trans
-;
-        play_FX(pos, rot, type == BULLET_HOLE_TYPE.EXPLOSION ? VFX_TYPE.SPARKHITBIG : VFX_TYPE.SPARKHIT);
 
-        _activeBulletHoles.Add(bHole);
+        var bHole = _bulletHolePool.GetPooledObject();
+        bHole.transform.SetPositionAndRotation(pos + normal * 0.01f, rot);
+        bHole.transform.parent = trans;
+        bHole.SetActive(true);
+        play_FX(pos, rot, type == BULLET_HOLE_TYPE.EXPLOSION ? VFX_TYPE.SPARKHITBIG : VFX_TYPE.SPARKHIT);
     }
 
     public void add_bullet_hole(RaycastHit hit, BULLET_HOLE_TYPE type)
     {
         add_bullet_hole(hit.point, hit.normal, type, hit.transform);
-    }
-
-    public void CleanBulletHoles()
-    {
-        foreach (var bullethole in _activeBulletHoles)
-        {
-            Destroy(bullethole);
-        }
     }
 
     /*
