@@ -13,7 +13,8 @@ public class Player : MonoBehaviour
 
         if (t < 0.5f) // make effects notacible after half health
             t /= 3f;
-        
+
+        // check if localplayer when adding multiplayer
         AudioManager.Instance.SetDistortion(t / 2f); // max should be .5f
 
         AudioManager.Instance.SetParamEQ(

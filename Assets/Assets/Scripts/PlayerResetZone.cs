@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class PlayerResetZone : MonoBehaviour
 {
-    [SerializeField] private Transform spawnPoint;
-
-    public float ResetDamage = 10f;
+    public float Damage = 10f;
 
     void OnTriggerEnter(Collider other)
     {
         if (other.transform.root.TryGetComponent<Player>(out var player))
         {
-            player.DoDamage(ResetDamage);
+            player.DoDamage(Damage);
+        }
+
+        if (other.transform.root.TryGetComponent<Weapon>(out var Weapon))
+        {
+            Destroy(other.transform.root.gameObject);
         }
 
     }
