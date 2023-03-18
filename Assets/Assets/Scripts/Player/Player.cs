@@ -8,12 +8,31 @@ public class Player : MonoBehaviour
     public void DoDamage(float val)
     {
         Health -= val;
+
+        float t = Mathf.Clamp01(1f - Health / 100f);
+
+        if (t < 0.5f) // make effects notacible after half health
+            t /= 3f;
+        
+        AudioManager.Instance.SetDistortion(t / 2f); // max should be .5f
+
+        AudioManager.Instance.SetParamEQ(
+            Mathf.Lerp(8000f, 7600f, t),
+            Mathf.Lerp(1f, 3f, t),
+            Mathf.Lerp(1f, 0.1f, t)
+            );
+
+        AudioManager.Instance.CenterFreqLimit = Mathf.Lerp(8000f, 7600f, t);
+        AudioManager.Instance.OctaveRangeLimit = Mathf.Lerp(1f, 3f, t);
+        AudioManager.Instance.FreqGainLimit = Mathf.Lerp(1f, 0.1f, t);
+
+        VFXManager.Instance.SetFilmGrain(t);
+
         if (Health < 0)
         {
             Health = 0;
             Die();
         }
-
 
         // cam shake on damage to any player
         CameraManager.Instance.DoShake(0.3f, 3f, 0.7f);

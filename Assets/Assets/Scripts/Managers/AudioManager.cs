@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Experimental.AI;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
+
+    [SerializeField] private AudioMixer _audioMixer;
 
     [Header("Music")]
     [SerializeField] private AudioSource _musicAudioSource;
@@ -41,13 +44,24 @@ public class AudioManager : MonoBehaviour
     [Space]
 
     public bool isInFight = false;
-
     private bool _isPlayingFightMusic = false;
-    [HideInInspector] public float InFightTimer = 0;
 
+    [HideInInspector] public float InFightTimer = 0;
     private float _swooshCooldownTimer = 0;
 
     private Pooler sfxPool = new();
+
+    #region AudioMixer
+    
+    //private float _ogFreqGain = 0;
+    //private float _ogOctaveRange = 0;
+    //private float _ogCenterFreq = 0;
+
+    public float FreqGainLimit = 8000f;
+    public float OctaveRangeLimit = 8000f;
+    public float CenterFreqLimit = 8000f;
+
+    #endregion
 
     void Awake()
     {
@@ -62,6 +76,10 @@ public class AudioManager : MonoBehaviour
         }
 
         _ogMusicVol = _musicAudioSource.volume;
+
+        CenterFreqLimit = GetParamEQ_CenterFreq();
+        FreqGainLimit = GetParamEQ_FreqGain();
+        OctaveRangeLimit = GetParamEQ_OctaveRange();
 
         _musicAudioSource.Play();
         sfxPool.PoolSize = 5;
@@ -94,6 +112,77 @@ public class AudioManager : MonoBehaviour
             InFightTimer -= Time.deltaTime;
         else 
             isInFight = false;
+    }
+
+    public void SetParamEQ(float centerFreq, float octaveRange, float freqGain)
+    {
+        _audioMixer.SetFloat("PARAMEQ_CENTERFREQ", centerFreq);
+        _audioMixer.SetFloat("PARAMEQ_OCTAVERANGE", octaveRange);
+        _audioMixer.SetFloat("PARAMEQ_FREQGAIN", freqGain);
+    }
+
+    public float GetParamEQ_CenterFreq()
+    {
+        if (_audioMixer.GetFloat("PARAMEQ_CENTERFREQ", out var tmp))
+           return tmp;
+        return 0;
+    }
+    public float GetParamEQ_OctaveRange()
+    {
+        if (_audioMixer.GetFloat("PARAMEQ_OCTAVERANGE", out var tmp))
+           return tmp;
+        return 0;
+    }
+    public float GetParamEQ_FreqGain()
+    {
+        if (_audioMixer.GetFloat("PARAMEQ_FREQGAIN", out var tmp))
+           return tmp;
+        return 0;
+    }
+
+    public void SetDistortion(float distortion)
+    {
+        _audioMixer.SetFloat("DISTORTION_LVL", distortion);
+    }
+
+    private float _deafenTimer = 0;
+    private bool _deafening = false;
+    public void PlayDeafningFX(float intensity = 0.5f)
+    {
+        _deafenTimer = 1;
+        SetParamEQ(
+            Mathf.Lerp(GetParamEQ_CenterFreq(), 7600f, intensity),
+            Mathf.Lerp(GetParamEQ_OctaveRange(), 3f, intensity),
+            Mathf.Lerp(GetParamEQ_FreqGain(), 0.1f, intensity)
+        );
+
+        if (!_deafening)
+           StartCoroutine(deafeningLerp());
+    }
+
+    IEnumerator deafeningLerp()
+    {
+        _deafening = true;
+
+        // lerp back very slowly
+        while (GetParamEQ_CenterFreq() < CenterFreqLimit - 0.01f || GetParamEQ_OctaveRange() > OctaveRangeLimit + 0.01f || GetParamEQ_FreqGain() < FreqGainLimit - 0.01f)
+        {
+            SetParamEQ(
+                Mathf.Lerp(GetParamEQ_CenterFreq(), CenterFreqLimit, 0.5f * Time.deltaTime),
+                Mathf.Lerp(GetParamEQ_OctaveRange(), OctaveRangeLimit, 0.5f * Time.deltaTime),
+                Mathf.Lerp(GetParamEQ_FreqGain(), FreqGainLimit, 0.5f * Time.deltaTime)
+            );
+
+            if (_deafenTimer > 0)
+                while (_deafenTimer > 0)
+                {
+                    _deafenTimer -= Time.deltaTime;
+                    yield return null;
+                }
+            yield return null;
+        }
+
+        _deafening = false;
     }
 
     private void PlayAmbienceInvoke()

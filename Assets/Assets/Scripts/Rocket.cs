@@ -56,6 +56,7 @@ public class Rocket : MonoBehaviour
                 collisionRoots.Add(collider.transform.root);
             }
 
+        AudioManager.Instance.PlayDeafningFX();
         AudioManager.Instance.UpFightMusic();
         AudioManager.Instance.Play_Explosion(point);
 

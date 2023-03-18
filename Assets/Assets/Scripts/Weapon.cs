@@ -80,6 +80,7 @@ public class Weapon : MonoBehaviour
         // Rocket has own hitscan function
         if (WeaponType == WEAPON.RPG)
         {
+            AudioManager.Instance.PlayDeafningFX(0.2f);
             AudioManager.Instance.Play_RPGShoot(_endOfBarrel.position);
 
             if (Physics.Raycast(_endOfBarrel.position, _endOfBarrel.forward, out var hit))
@@ -97,9 +98,11 @@ public class Weapon : MonoBehaviour
                     rocketFlag = true;
                 }
             }
+
             var shotRocket = Instantiate(RocketObj);
-            shotRocket.transform.SetPositionAndRotation(RocketObj.transform.position, RocketObj.transform.rotation);
             Destroy(RocketObj);
+            shotRocket.transform.SetPositionAndRotation(RocketObj.transform.position, RocketObj.transform.rotation);
+            
             if (!rocketFlag)
             {
                 var rocket = shotRocket.AddComponent<Rocket>();
@@ -119,6 +122,7 @@ public class Weapon : MonoBehaviour
         }
         else
         {
+            AudioManager.Instance.PlayDeafningFX(0.05f);
             AudioManager.Instance.Play_GunShoot(_endOfBarrel.position);
             if (Physics.Raycast(_endOfBarrel.position, _endOfBarrel.forward, out var hit))
             {
@@ -129,6 +133,7 @@ public class Weapon : MonoBehaviour
                 AudioManager.Instance.Play_BulletHit(hit.point);
                 //print("hit: " + hit.collider.name);
                 VFXManager.Instance.apply_force(hit.point, BulletForce * 100, 3);
+                //VFXManager.Instance.play_FX(hit.point, hit.normal, );
                 HitScan(hit);
             }
         }

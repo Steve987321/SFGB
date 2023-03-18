@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Pool;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
+
 using Random = UnityEngine.Random;
 
 public class VFXManager : MonoBehaviour
@@ -25,7 +27,9 @@ public class VFXManager : MonoBehaviour
     }
 
     [SerializeField] private ParticleSystem _muzzleFlash;
+    [SerializeField] private ParticleSystem _gunSparks;
     [SerializeField] private ParticleSystem _sparks;
+    [SerializeField] private ParticleSystem _sparks2;
     [SerializeField] private ParticleSystem _smokeGun;
     [SerializeField] private ParticleSystem _smokeBig;
     [SerializeField] private ParticleSystem _bigSparkHit;
@@ -45,6 +49,19 @@ public class VFXManager : MonoBehaviour
 
     private Pooler _bulletHolePool = new();
 
+    #region PostProcessing
+
+    [SerializeField] private Volume _vol;
+    
+    private Vignette _vignette;
+    private float _ogVigIntensity = 0;
+    private float _ogVigSmoothness = 0;
+
+    private FilmGrain _grain;
+    private float _ogGrainIntensity = 0;
+
+    #endregion
+
     public static VFXManager Instance { get; private set; }
 
     void Awake()
@@ -58,6 +75,18 @@ public class VFXManager : MonoBehaviour
         _bulletHolePool.pooledObjectArray = _metalHits;
         _bulletHolePool.PoolSize = 20;
         _bulletHolePool.CreatePool();
+
+        if (_vol.profile.TryGet<Vignette>(out var vignette))
+        {
+            _vignette = vignette;
+            _ogVigIntensity = vignette.intensity.value;
+            _ogVigSmoothness = vignette.smoothness.value;
+        }
+        if (_vol.profile.TryGet<FilmGrain>(out var grain))
+        {
+            _grain = grain;
+            _ogGrainIntensity = _grain.intensity.value;
+        }
     }
 
     public void play_FX(Vector3 pos, Quaternion rot, VFX_TYPE type)
@@ -85,6 +114,49 @@ public class VFXManager : MonoBehaviour
         }
     }
 
+    private bool _vigCoroutineStarted = false;
+    private float _vigCoroutineTimer = 0.0f;
+    public void AddVignetteIntesity()
+    {
+        if (_vignette.intensity.value < 1f)
+            _vignette.intensity.value += 0.05f;
+        if (_vignette.smoothness.value < 1f)
+            _vignette.smoothness.value += 0.1f;
+
+        _vigCoroutineTimer = 1f; // delay a second before lerping back to og val
+        if (!_vigCoroutineStarted)
+            StartCoroutine(VignetteLerper());
+    }
+
+
+    public void SetFilmGrain(float val)
+    {
+        val = Mathf.Clamp01(val);
+        _grain.intensity.value = val;
+    }
+
+    private System.Collections.IEnumerator VignetteLerper()
+    {
+        _vigCoroutineStarted = true;
+
+        while (_vignette.intensity.value > _ogVigIntensity || _vignette.smoothness.value > _ogVigSmoothness)
+        {
+            _vignette.intensity.value = Mathf.Lerp(_vignette.intensity.value, _ogVigIntensity, 2f * Time.deltaTime);
+            _vignette.smoothness.value = Mathf.Lerp(_vignette.smoothness.value, _ogVigSmoothness, 2f * Time.deltaTime);
+
+            if (_vigCoroutineTimer > 0)
+                while (_vigCoroutineTimer > 0)
+                {
+                    _vigCoroutineTimer -= Time.deltaTime;
+                    yield return null;
+                }
+
+            yield return null;
+        }
+
+        _vigCoroutineStarted = false;
+    }
+
     public void play_FX(Transform at, VFX_TYPE type)
     {
         play_FX(at.position, at.rotation, type);
@@ -102,6 +174,7 @@ public class VFXManager : MonoBehaviour
     {
         PlayParticleSystem(_bloodSplatter, pos, rot, 3f);
     }
+
     public void play_bloodMist(Vector3 pos, Quaternion rot)
     {
         PlayParticleSystem(_bloodMist, pos, rot, 4f);
@@ -124,7 +197,7 @@ public class VFXManager : MonoBehaviour
         play_smokepuff(pos, rot);
         PlayParticleSystem(_muzzleFlash, pos, rot, 3);
         PlayParticleSystem(_smokeGun, pos, rot, 3);
-        PlayParticleSystem(_sparks, pos, rot, 3);
+        PlayParticleSystem(_gunSparks, pos, rot, 3);
     }
 
     public void play_sparkHitBig(Vector3 pos, Quaternion rot)
@@ -135,6 +208,7 @@ public class VFXManager : MonoBehaviour
     private void play_sparkHit(Vector3 pos, Quaternion rot)
     {
         PlayParticleSystem(_sparks, pos, rot, 3);
+        PlayParticleSystem(_sparks2, pos, rot, 3);
     }
 
     public void apply_force(Vector3 at, float force, float radius)

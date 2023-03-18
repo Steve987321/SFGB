@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 1.1189575, g: 1.2457638, b: 1.4697266, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2867,7 +2867,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _muzzleFlash: {fileID: 22242428}
-  _sparks: {fileID: 519125675}
+  _gunSparks: {fileID: 519125675}
+  _sparks: {fileID: 1206951640}
+  _sparks2: {fileID: 1349095422}
   _smokeGun: {fileID: 556126107}
   _smokeBig: {fileID: 556126108}
   _bigSparkHit: {fileID: 556126104}
@@ -2881,6 +2883,7 @@ MonoBehaviour:
   - {fileID: 718953272}
   _bloodSplatter: {fileID: 556126106}
   _bloodMist: {fileID: 556126105}
+  _vol: {fileID: 1728718764}
 --- !u!1 &349362865
 GameObject:
   m_ObjectHideFlags: 0
@@ -5252,7 +5255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437377938659, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.13
+      value: 3.59
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437377938659, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5260,11 +5263,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437377938661, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: TrailModule.lifetime.scalar
-      value: 0.2
+      value: 0.09
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437377938661, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: LightsModule.rangeCurve.scalar
       value: 0.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023437377938661, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 6.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023437377938661, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1.33
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437377938661, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: LightsModule.intensityCurve.scalar
@@ -5320,7 +5331,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437628325984, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_Intensity
-      value: 476.00626
+      value: 1.0520015
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437628325984, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_ShadowRadius
@@ -5336,11 +5347,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437628325984, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 0
+      value: -7.3942036e-28
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437628325984, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 0
+      value: 1.02e-43
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437628325984, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_BoundingSphereOverride.y
@@ -5352,11 +5363,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437628325987, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 94.8
+      value: 46.550003
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437628325998, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023437675555282, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: LightsModule.maxLights
+      value: 29
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023437675555282, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 6.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023437675555282, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 21.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023437675555282, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: LightsModule.intensityCurve.scalar
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023437675555285, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -12.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023437675555285, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023437675555285, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -17.18
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437791744621, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5408,7 +5447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437850802733, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 0.28
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 5317023437850802733, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: LightsModule.intensityCurve.scalar
@@ -5561,6 +5600,30 @@ PrefabInstance:
     - target: {fileID: 5317023438121112347, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: InitialModule.startColor.maxColor.a
       value: 0.02745098
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023438184676309, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023438184676309, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023438184676309, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -15.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023438184676311, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: LightsModule.rangeCurve.scalar
+      value: 0.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023438184676311, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 14.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317023438184676311, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+      propertyPath: LightsModule.intensityCurve.scalar
+      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 5317023438217745495, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
       propertyPath: m_IsActive
@@ -14837,7 +14900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a68c43fe1f2a47cfa234b5eeaa98012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Intensity: 5981.6714
+  m_Intensity: 13.219841
   m_EnableSpotReflector: 1
   m_LuxAtDistance: 1
   m_InnerSpotPercent: 0
@@ -16814,6 +16877,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1204171695}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!198 &1206951640 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5317023437675555282, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+  m_PrefabInstance: {fileID: 556126098}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1210716792
 GameObject:
   m_ObjectHideFlags: 0
@@ -23613,6 +23681,11 @@ BoxCollider:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 694f583f7b05283439a7eebebfe3706b, type: 3}
   m_PrefabInstance: {fileID: 1337350266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1349095422 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5317023437377938661, guid: afa9803e7d7b03e428f30d421fd8707b, type: 3}
+  m_PrefabInstance: {fileID: 556126098}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1349167713
 GameObject:
@@ -33903,6 +33976,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1553273920}
     m_Modifications:
+    - target: {fileID: 4997379437594653468, guid: 5992f8f8829b8bd47a34fa8e32f7d441, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 2bf9bbe97cb6b8a4a9cb063b8b4c5974, type: 2}
+    - target: {fileID: 4997379437809162746, guid: 5992f8f8829b8bd47a34fa8e32f7d441, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 2bf9bbe97cb6b8a4a9cb063b8b4c5974, type: 2}
     - target: {fileID: 4997379439221395680, guid: 5992f8f8829b8bd47a34fa8e32f7d441, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -33952,6 +34033,10 @@ PrefabInstance:
       value: AudioManager
       objectReference: {fileID: 0}
     - target: {fileID: 4997379439221395683, guid: 5992f8f8829b8bd47a34fa8e32f7d441, type: 3}
+      propertyPath: _audioMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: 2bf9bbe97cb6b8a4a9cb063b8b4c5974, type: 2}
+    - target: {fileID: 4997379439221395683, guid: 5992f8f8829b8bd47a34fa8e32f7d441, type: 3}
       propertyPath: _musicLoop1
       value: 
       objectReference: {fileID: 8300000, guid: 8069ff5b4ce806140ae031e241b3f4f1, type: 3}
@@ -33975,6 +34060,10 @@ PrefabInstance:
       propertyPath: _ambientSounds.Array.data[1]
       value: 
       objectReference: {fileID: 8300000, guid: 4c121acdc033d64409b2b2d6838be64a, type: 3}
+    - target: {fileID: 4997379439458089523, guid: 5992f8f8829b8bd47a34fa8e32f7d441, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 24300002, guid: 2bf9bbe97cb6b8a4a9cb063b8b4c5974, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5992f8f8829b8bd47a34fa8e32f7d441, type: 3}
 --- !u!23 &5096844070341272107

@@ -68,6 +68,7 @@
     <Compile Include="Assets\Assets\Scripts\Player\PlayerHandGrips.cs" />
     <Compile Include="Assets\Assets\Scripts\Player\RelativePlayerMovement.cs" />
     <Compile Include="Assets\Assets\Scripts\Managers\CarManager.cs" />
+    <Compile Include="Assets\Assets\Scripts\Managers\AudioManager.cs" />
     <Compile Include="Assets\Assets\Scripts\Managers\CameraManager.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansBridgeLink.cs" />
     <Compile Include="Assets\Assets\Scripts\Managers\VFXManager.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="Assets\Assets\Scripts\Player\PlayerGunHandler.cs" />
     <Compile Include="Assets\Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMeshUtils.cs" />
     <Compile Include="Assets\Assets\Scripts\Utils\Helpers.cs" />
-    <Compile Include="Assets\Assets\Scripts\Managers\AudioManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
