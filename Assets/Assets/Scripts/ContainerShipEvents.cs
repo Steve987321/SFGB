@@ -77,6 +77,8 @@ public class ContainerShipEvents : MonoBehaviour
         _lightningBolt.transform.SetPositionAndRotation(randomPos, Quaternion.Euler(randAngle, randAngle, randAngle));
         _lightningBolt.SetActive(true);
 
+        AudioManager.Instance.Play_Thunder(randomPos);
+
         VFXManager.Instance.apply_force(randomPos, 3000, LightningBoltRadius);   
         VFXManager.Instance.apply_radius_damage(randomPos, LightningBoltRadius, LightningBoltDamage);
         VFXManager.Instance.play_sparkHitBig(randomPos, Quaternion.identity);

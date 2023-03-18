@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Weapon : MonoBehaviour
 {
@@ -71,11 +72,16 @@ public class Weapon : MonoBehaviour
         _canShoot = false;
         Ammo--;
 
+        if (Random.Range(0f, 1f) > 0.2f)
+            AudioManager.Instance.Play_BulletFlyBy();
+
         Debug.DrawRay(_endOfBarrel.position, _endOfBarrel.forward, Color.red, 3);
         bool rocketFlag = false;
         // Rocket has own hitscan function
         if (WeaponType == WEAPON.RPG)
         {
+            AudioManager.Instance.Play_RPGShoot(_endOfBarrel.position);
+
             if (Physics.Raycast(_endOfBarrel.position, _endOfBarrel.forward, out var hit))
             {
                 if (Helper.IsInReach(hit.point, _endOfBarrel.position, 20))
@@ -83,7 +89,7 @@ public class Weapon : MonoBehaviour
                     var relativePos = _endOfBarrel.position - hit.point;
 
                     Rocket.DoRocketDamage(transform.root, hit.point);
-
+                    
                     VFXManager.Instance.apply_force(hit.point, 1200, 20);
                     VFXManager.Instance.add_bullet_hole(hit.point, hit.normal, VFXManager.BULLET_HOLE_TYPE.EXPLOSION, hit.transform.transform);
                     VFXManager.Instance.play_sparkHitBig(hit.point, Quaternion.LookRotation(relativePos, Vector3.up));
@@ -113,8 +119,14 @@ public class Weapon : MonoBehaviour
         }
         else
         {
+            AudioManager.Instance.Play_GunShoot(_endOfBarrel.position);
             if (Physics.Raycast(_endOfBarrel.position, _endOfBarrel.forward, out var hit))
             {
+                if (Helper.IsInReach(hit.point, _endOfBarrel.position, 3f) || Helper.IsInReach(hit.point, Camera.main.transform.position, 5f))
+                {
+                    AudioManager.Instance.Play_BulletFlyBy();
+                }
+                AudioManager.Instance.Play_BulletHit(hit.point);
                 //print("hit: " + hit.collider.name);
                 VFXManager.Instance.apply_force(hit.point, BulletForce * 100, 3);
                 HitScan(hit);
@@ -147,10 +159,10 @@ public class Weapon : MonoBehaviour
         {
             var relativePos = hit.point - transform.position;
             VFXManager.Instance.play_FX(hit.point, Quaternion.LookRotation(relativePos), VFXManager.VFX_TYPE.BLOODHIT);
+            AudioManager.Instance.UpFightMusic();
             player.DoDamage(Damage);
             return true;
         }
-
 
         VFXManager.Instance.add_bullet_hole(hit, VFXManager.BULLET_HOLE_TYPE.METAL);
 

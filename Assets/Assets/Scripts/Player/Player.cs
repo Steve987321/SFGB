@@ -4,7 +4,6 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float Health = 100f;
-    [SerializeField] private Transform _activePlayer;
 
     public void DoDamage(float val)
     {
@@ -14,6 +13,7 @@ public class Player : MonoBehaviour
             Health = 0;
             Die();
         }
+
 
         // cam shake on damage to any player
         CameraManager.Instance.DoShake(0.3f, 3f, 0.7f);

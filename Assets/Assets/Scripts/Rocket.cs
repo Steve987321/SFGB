@@ -56,6 +56,9 @@ public class Rocket : MonoBehaviour
                 collisionRoots.Add(collider.transform.root);
             }
 
+        AudioManager.Instance.UpFightMusic();
+        AudioManager.Instance.Play_Explosion(point);
+
         CameraManager.Instance.DoShake(0.5f, 2f, 5);
     }
 }

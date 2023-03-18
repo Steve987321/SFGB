@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 100
-  _playerCenter: {fileID: 7380780876201090713}
+  _activePlayer: {fileID: 0}
 --- !u!1 &3103055711390345217
 GameObject:
   m_ObjectHideFlags: 0
@@ -742,6 +742,25 @@ MonoBehaviour:
   AssistAiming: 1
   HittingHand: 0
   Punching: 0
+--- !u!114 &420421908180873743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012346279862147477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9098cea9417e7e40b3d975f577a3e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _PlayerCenter: {fileID: 7380780876201090715}
+  _animatorAimObj: {fileID: 7412900480900225908}
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  _rbAimObj: {fileID: 5693208874880915727}
+  _aimOffset: {x: -92.4, y: -160, z: 0.8}
 --- !u!4 &1622246840511982575 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2205010292778613282, guid: d436a14a7a2cb2a4c856b1274da19cb5, type: 3}
@@ -2676,6 +2695,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 1622246840511982575}
+--- !u!4 &5693208874880915727 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8897410639526408325, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
+  m_PrefabInstance: {fileID: 3781797288182049162}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5721724449044562435 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8870968159911832457, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
@@ -2798,11 +2822,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 884291554129780942}
---- !u!54 &7380780876201090713 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 5915031171226810131, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
-  m_PrefabInstance: {fileID: 3781797288182049162}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7380780876201090715 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5915031171226810129, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}

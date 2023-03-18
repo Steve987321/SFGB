@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         DontDestroyOnLoad(gameObject);
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = -1;
     }
 
     void LateUpdate()

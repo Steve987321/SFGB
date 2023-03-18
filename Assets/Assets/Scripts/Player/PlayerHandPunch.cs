@@ -32,6 +32,7 @@ public class PlayerHandPunch : MonoBehaviour
         }
         if (_rb.velocity.magnitude > _punchHitThreshold && !_onceFlag)
         {
+            AudioManager.Instance.Play_Swoosh(transform.position);
             VFXManager.Instance.apply_force(transform.position, _punchForce * 10, 1, _excludeRb);
             var colliders = Physics.OverlapSphere(transform.position, 0.5f);
             foreach (var col in colliders)
@@ -40,6 +41,9 @@ public class PlayerHandPunch : MonoBehaviour
                 if (col.transform.root.TryGetComponent<Player>(out var player))
                 {
                     player.DoDamage(2.5f);
+
+                    AudioManager.Instance.Play_Punch(transform.position);
+
                     VFXManager.Instance.play_bloodSplatter(transform.position, transform.rotation);
                     //VFXManager.Instance.play_FX(transform.position, transform.rotation, VFXManager.VFX_TYPE.BLOODHIT);
                     _onceFlag = true;
