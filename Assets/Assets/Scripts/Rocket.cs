@@ -48,7 +48,7 @@ public class Rocket : MonoBehaviour
     {
         var collisionRoots = new List<Transform>();
 
-        foreach (var collider in Physics.OverlapSphere(point, 20))
+        foreach (var collider in Physics.OverlapSphere(point, 10))
             if (collider.transform.root.TryGetComponent<Player>(out var player)
                 && !collisionRoots.Contains(collider.transform.root))
             {

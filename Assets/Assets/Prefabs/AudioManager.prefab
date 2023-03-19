@@ -360,6 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c31c69f7b2bcab143886a1d4bd107e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _audioMixer: {fileID: 24100000, guid: 2bf9bbe97cb6b8a4a9cb063b8b4c5974, type: 2}
   _musicAudioSource: {fileID: 4997379437594653468}
   _musicLoop1: {fileID: 0}
   _musicLoop2: {fileID: 0}
@@ -392,6 +393,9 @@ MonoBehaviour:
   _RPGAudioShootSound: {fileID: 8300000, guid: a2587fd35b2bff2428d814dbf222501e, type: 3}
   isInFight: 0
   InFightTimer: 0
+  FreqGainLimit: 8000
+  OctaveRangeLimit: 8000
+  CenterFreqLimit: 8000
 --- !u!1 &4997379439458089521
 GameObject:
   m_ObjectHideFlags: 0
