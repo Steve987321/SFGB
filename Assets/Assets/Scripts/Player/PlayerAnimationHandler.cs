@@ -53,6 +53,7 @@ public class PlayerAnimationHandler : MonoBehaviour
         }
 
         _animController.SetBool("isMoving", _playerMovement.IsMoving);
+        _animController.SetBool("isBackwardsMoving", _playerMovement.IsMovingBackwards);
         _animController.SetBool("isAiming", _playerGunHandler.HasWeapon);
         _animController.SetBool("isJumping", Input.GetKey(KeyCode.Space));
 
@@ -67,6 +68,13 @@ public class PlayerAnimationHandler : MonoBehaviour
             _punchTimer = 0;
         }
     }
+
+#if UNITY_EDITOR
+    void OnGUI()
+    {
+        GUI.Label(new Rect(0, 50, 300, 100), _playerMovement.transform.rotation + " " + _playerMovement.Direction);
+    }
+#endif
 
     private IEnumerator _AddForce(Rigidbody rb)
     {

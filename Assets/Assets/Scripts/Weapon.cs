@@ -99,9 +99,8 @@ public class Weapon : MonoBehaviour
                 }
             }
 
-            var shotRocket = Instantiate(RocketObj);
+            var shotRocket = Instantiate(RocketObj, _endOfBarrel.position, RocketObj.transform.rotation);
             Destroy(RocketObj);
-            shotRocket.transform.SetPositionAndRotation(RocketObj.transform.position, RocketObj.transform.rotation);
             
             if (!rocketFlag)
             {
@@ -122,7 +121,7 @@ public class Weapon : MonoBehaviour
         }
         else
         {
-            AudioManager.Instance.PlayDeafningFX(0.05f);
+            AudioManager.Instance.PlayDeafningFX(0.025f);
             AudioManager.Instance.Play_GunShoot(_endOfBarrel.position);
             if (Physics.Raycast(_endOfBarrel.position, _endOfBarrel.forward, out var hit))
             {

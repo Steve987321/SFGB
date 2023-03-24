@@ -81,8 +81,9 @@ public class ContainerShipEvents : MonoBehaviour
 
         VFXManager.Instance.apply_force(randomPos, 3000, LightningBoltRadius);   
         VFXManager.Instance.apply_radius_damage(randomPos, LightningBoltRadius, LightningBoltDamage);
-        AudioManager.Instance.PlayDeafningFX();
         VFXManager.Instance.play_sparkHitBig(randomPos, Quaternion.identity);
+
+        AudioManager.Instance.PlayDeafningFX(0.1f);
 
         yield return new WaitForSeconds(0.15f); // show bolt for 0.15 seconds
 

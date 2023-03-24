@@ -47,7 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Health: 100
-  _activePlayer: {fileID: 0}
 --- !u!1 &3103055711390345217
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,6 +783,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RotationSpeed: 3
+  _ignoreLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _rbObj: {fileID: 7380780876201090715}
 --- !u!4 &5287484459352815071 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4718170267674616850, guid: d436a14a7a2cb2a4c856b1274da19cb5, type: 3}
@@ -2562,6 +2565,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Speed: 3
   IsMoving: 0
+  IsMovingBackwards: 0
+  Direction: {x: 0, y: 0, z: 0}
 --- !u!114 &7380780876201090742
 MonoBehaviour:
   m_ObjectHideFlags: 0
