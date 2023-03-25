@@ -64,7 +64,7 @@ public class RelativePlayerMovement : MonoBehaviour
 
     void OnGUI()
     {
-        var res = (
+        var res = Direction == Vector3.zero ? Vector3.zero : (
             Quaternion.LookRotation(
             transform.position + Direction - transform.position).eulerAngles
             -

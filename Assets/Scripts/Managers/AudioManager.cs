@@ -49,7 +49,7 @@ public class AudioManager : MonoBehaviour
     [HideInInspector] public float InFightTimer = 0;
     private float _swooshCooldownTimer = 0;
 
-    private Pooler sfxPool = new();
+    private GOPooler sfxPool = new();
 
     #region AudioMixer
     

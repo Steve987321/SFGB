@@ -4,7 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Pooler : MonoBehaviour
+public class GOPooler : MonoBehaviour
 {
     public GameObject pooledObject;
     public GameObject[] pooledObjectArray;
@@ -20,6 +20,7 @@ public class Pooler : MonoBehaviour
 
         for (int i = 0; i < PoolSize; i++)
         {
+            // TODO: dont use random when creating pool from go array
             var obj = Instantiate(use_array ? pooledObjectArray[Random.Range(0, pooledObjectArray.Length)]: pooledObject);
             obj.SetActive(false);
             objectPool.Add(obj);

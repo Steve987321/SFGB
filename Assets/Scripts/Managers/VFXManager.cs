@@ -47,7 +47,7 @@ public class VFXManager : MonoBehaviour
     [SerializeField] private ParticleSystem _bloodSplatter;
     [SerializeField] private ParticleSystem _bloodMist;
 
-    private Pooler _bulletHolePool = new();
+    private GOPooler _bulletHolePool = new();
 
     #region PostProcessing
 
