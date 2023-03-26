@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using Unity.Mathematics;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
-public class PlayerAnimationHandler : MonoBehaviour
+public class PlayerAnimationHandler : NetworkBehaviour
 {
     [SerializeField] private Transform _PlayerCenter;
 
@@ -47,6 +48,9 @@ public class PlayerAnimationHandler : MonoBehaviour
     private float _punchTimer = 0;
     void Update()
     {
+        if (!IsOwner)
+            return;
+
         if (_punchTimer < PunchCooldown)
         {
             _punchTimer += Time.deltaTime;

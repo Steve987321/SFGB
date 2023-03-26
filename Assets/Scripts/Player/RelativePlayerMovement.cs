@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class RelativePlayerMovement : MonoBehaviour
+public class RelativePlayerMovement : NetworkBehaviour
 {
     public float Speed = 6.0f;
 
@@ -18,6 +19,9 @@ public class RelativePlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner)
+            return;
+        
         var horizontal = Input.GetAxis("Horizontal");
         var vertical = Input.GetAxis("Vertical");
 

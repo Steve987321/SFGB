@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -92,6 +93,7 @@ public class WeaponManager : MonoBehaviour
         {
             int f = Random.Range(0, _weapons.Length);
             var weapon = Instantiate(_weapons[f]);
+            weapon.GetComponent<NetworkObject>().Spawn(true);
             weapon.transform.position = Helper.GetRandomPointOnPlane(
                 SpawnPlanes.Length == 1 ? SpawnPlanes[0] : SpawnPlanes[Random.Range(0, SpawnPlanes.Length)]
                 );

@@ -26,6 +26,8 @@ public class VFXManager : MonoBehaviour
         EXPLOSION,
     }
 
+    #region VFX
+
     [SerializeField] private ParticleSystem _muzzleFlash;
     [SerializeField] private ParticleSystem _gunSparks;
     [SerializeField] private ParticleSystem _sparks;
@@ -46,6 +48,8 @@ public class VFXManager : MonoBehaviour
     
     [SerializeField] private ParticleSystem _bloodSplatter;
     [SerializeField] private ParticleSystem _bloodMist;
+
+    #endregion
 
     private GOPooler _bulletHolePool = new();
 

@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerHandPunch : MonoBehaviour
+public class PlayerHandPunch : NetworkBehaviour
 {
     [SerializeField] private Transform _root;
     [SerializeField] private PlayerAnimationHandler _animHandler;
 
     private const float _punchHitThreshold = 10f;
-    private const float _punchForce = 50f;
+    private const float _punchForce = 10f;
 
     private Rigidbody _rb;
      
@@ -25,6 +26,8 @@ public class PlayerHandPunch : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!IsOwner) return;
+
         if (!_animHandler.Punching)
         {
             _onceFlag = false;

@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-public class PlayerGunHandler : MonoBehaviour
+public class PlayerGunHandler : NetworkBehaviour
 {
     [SerializeField] private Transform _gunHand;
 
@@ -30,9 +32,9 @@ public class PlayerGunHandler : MonoBehaviour
 
     void Start()
     {
-        _gunHandRb.rb = _gunHand.parent.GetComponent<Rigidbody>();
-        _gunLArmRb.rb = _gunHand.parent.parent.GetComponent<Rigidbody>();
-        _gunUArmRb.rb = _gunHand.parent.parent.parent.GetComponent<Rigidbody>();
+        _gunHandRb.rb = _gunHand.GetComponent<Rigidbody>();
+        _gunLArmRb.rb = _gunHand.parent.GetComponent<Rigidbody>();
+        _gunUArmRb.rb = _gunHand.parent.parent.GetComponent<Rigidbody>();
 
         _gunHandRb.ogAngularDrag = _gunHandRb.rb.angularDrag;
         _gunHandRb.ogDrag = _gunHandRb.rb.drag;
@@ -45,6 +47,9 @@ public class PlayerGunHandler : MonoBehaviour
 
     void Update()
     {
+        if (!IsOwner)
+            return;
+
         if (!HasWeapon)
         {
             PickUpGunHandler();
@@ -109,7 +114,9 @@ public class PlayerGunHandler : MonoBehaviour
             _gunRBMass = closestGun.GetComponent<Rigidbody>().mass;
 
             var go = Instantiate(closestGun);
+            go.GetComponent<NetworkObject>().Spawn();
 
+            Destroy(go.GetComponent<NetworkRigidbody>());
             Destroy(go.GetComponent<Rigidbody>());
             go.SetPositionAndRotation(_gunHand.position, _gunHand.rotation);
 
@@ -136,6 +143,7 @@ public class PlayerGunHandler : MonoBehaviour
 
             go.parent = _gunHand;
             go.tag = "Untagged";
+            closestGun.GetComponent<NetworkObject>().Despawn();
             Destroy(closestGun.gameObject);
             _weapon = go.gameObject;
             _gunHandRb.rb.mass = 0.2f;

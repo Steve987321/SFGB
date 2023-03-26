@@ -1,8 +1,9 @@
 using System.Linq;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerHandGrips : MonoBehaviour
+public class PlayerHandGrips : NetworkBehaviour
 {
     [SerializeField] private PlayerGunHandler _gunHandler;
     public bool IsDominantHand = false;
@@ -24,6 +25,9 @@ public class PlayerHandGrips : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!IsOwner)
+            return;
+
         _grippingBtnDown = Input.GetKey(KeyCode.Mouse1);
 
         if (!_grippingBtnDown && _isHolding)

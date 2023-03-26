@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class RelativePlayerRotation : MonoBehaviour
+public class RelativePlayerRotation : NetworkBehaviour
 {
     public float RotationSpeed = 10;
 
@@ -31,6 +32,8 @@ public class RelativePlayerRotation : MonoBehaviour
 
     void LateUpdate()
     {
+        if (!IsOwner) return;
+
         //var pos = Camera.main.ScreenToWorldPoint(new Vectoasr3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerAiming : MonoBehaviour
+public class PlayerAiming : NetworkBehaviour
 {
     [SerializeField] private Transform _PlayerCenter;
     [SerializeField] private Transform _animatorAimObj;
@@ -19,10 +20,11 @@ public class PlayerAiming : MonoBehaviour
         Debug.Assert(_playerGunHandler != null, "player gun handler is null");
     }
 
-    // TODO: remove aim animation ?
-    // after animation positions get applied
     void LateUpdate()
     {
+        if (!IsOwner)
+            return;
+
         if (_playerGunHandler.HasWeapon)
         {
             //var pos = Camera.main.ScreenToWorldPoint(new Vectoasr3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));

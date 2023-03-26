@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerResetZone : MonoBehaviour
@@ -8,6 +9,8 @@ public class PlayerResetZone : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (other.TryGetComponent<NetworkObject>(out var no))
+            no.Despawn();
         if (other.transform.root.TryGetComponent<Player>(out var player))
         {
             player.DoDamage(Damage);
@@ -17,6 +20,5 @@ public class PlayerResetZone : MonoBehaviour
         {
             Destroy(other.transform.root.gameObject);
         }
-
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -28,11 +29,19 @@ public class GameManager : MonoBehaviour
         {
 
         }
+
+        if (Input.GetKeyDown(KeyCode.Insert))
+        {
+            Cursor.visible = !Cursor.visible;
+        }
     }
 
     void OnGUI()
     {
-        GUI.Label(new Rect(0, 0, 100, 100), (1 / Time.smoothDeltaTime).ToString());
+        if (GUI.Button(new Rect(50, 300, 100, 50), "Start Client"))
+            NetworkManager.Singleton.StartClient();
+        if (GUI.Button(new Rect(50, 360, 100, 50), "Start Host"))
+            NetworkManager.Singleton.StartHost();
     }
 
 }

@@ -1,7 +1,8 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
     public float Health = 100f;
 
@@ -15,19 +16,22 @@ public class Player : MonoBehaviour
             t /= 3f;
 
         // check if localplayer when adding multiplayer
-        AudioManager.Instance.SetDistortion(t / 2f); // max should be .5f
+        if (IsOwner)
+        {
+            AudioManager.Instance.SetDistortion(t / 2f); // max should be .5f
 
-        AudioManager.Instance.SetParamEQ(
-            Mathf.Lerp(8000f, 7600f, t),
-            Mathf.Lerp(1f, 3f, t),
-            Mathf.Lerp(1f, 0.1f, t)
+            AudioManager.Instance.SetParamEQ(
+                Mathf.Lerp(8000f, 7600f, t),
+                Mathf.Lerp(1f, 3f, t),
+                Mathf.Lerp(1f, 0.1f, t)
             );
 
-        AudioManager.Instance.CenterFreqLimit = Mathf.Lerp(8000f, 7600f, t);
-        AudioManager.Instance.OctaveRangeLimit = Mathf.Lerp(1f, 3f, t);
-        AudioManager.Instance.FreqGainLimit = Mathf.Lerp(1f, 0.1f, t);
+            AudioManager.Instance.CenterFreqLimit = Mathf.Lerp(8000f, 7600f, t);
+            AudioManager.Instance.OctaveRangeLimit = Mathf.Lerp(1f, 3f, t);
+            AudioManager.Instance.FreqGainLimit = Mathf.Lerp(1f, 0.1f, t);
 
-        VFXManager.Instance.SetFilmGrain(t);
+            VFXManager.Instance.SetFilmGrain(t);
+        }
 
         if (Health < 0)
         {
