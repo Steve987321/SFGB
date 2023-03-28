@@ -106,12 +106,13 @@ public class WeaponManager : MonoBehaviour
 
         foreach (var weapon in _activeWeapons)
         {
-            if (weapon.transform.parent == null && weapon.Ammo <= 0)
+            if (!weapon.IsEquippedByPlayer && weapon.Ammo <= 0)
             {
+                weapon.GetComponent<NetworkObject>().Despawn();
                 Destroy(weapon.gameObject);
             }
 
-            if (weapon.transform.position.y < -100)
+            if (weapon.transform.position.y < -30)
             {
                 Destroy(weapon.gameObject);
             }

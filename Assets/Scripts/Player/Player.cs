@@ -1,10 +1,23 @@
 using System;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
     public float Health = 100f;
+
+    void Start()
+    {
+        if (!IsOwner)
+            return;
+
+        var ignoreLayer = LayerMask.NameToLayer("IgnoreAim");
+
+        gameObject.layer = ignoreLayer;
+        foreach (Transform t in transform)
+            t.gameObject.layer = ignoreLayer;
+    }
 
     public void DoDamage(float val)
     {

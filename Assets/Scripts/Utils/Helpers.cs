@@ -49,7 +49,7 @@ public class Helper
         }
 
         // Trim array to actual number of rigidbodies
-        System.Array.Resize(ref rigidbodies, count);
+        Array.Resize(ref rigidbodies, count);
 
         return rigidbodies;
     }
@@ -71,7 +71,7 @@ public class Helper
         }
 
         // Trim array to actual number of rigidbodies
-        System.Array.Resize(ref transforms, count);
+        Array.Resize(ref transforms, count);
 
         return transforms;
     }
@@ -93,5 +93,5 @@ public class Helper
     {
         (list[indexB], list[indexA]) = (list[indexA], list[indexB]);
     }
- 
+
 }

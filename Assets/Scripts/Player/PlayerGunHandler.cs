@@ -1,16 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Unity.Netcode;
 using Unity.Netcode.Components;
+using Unity.VisualScripting;
+using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 public class PlayerGunHandler : NetworkBehaviour
 {
     [SerializeField] private Transform _gunHand;
+
+    private List<Collider> _lplayerCollissions;
 
     private struct Arm
     {
@@ -20,11 +22,10 @@ public class PlayerGunHandler : NetworkBehaviour
     }
 
     private GameObject _weapon;
-    private float _gunRBMass;
 
     private Arm _gunHandRb, _gunUArmRb, _gunLArmRb;
 
-    private float ogVal;
+    private float _gunRBMass;
 
     // whether the player has a weapon equipped
     public bool HasWeapon = false;
@@ -32,9 +33,9 @@ public class PlayerGunHandler : NetworkBehaviour
 
     void Start()
     {
-        _gunHandRb.rb = _gunHand.GetComponent<Rigidbody>();
-        _gunLArmRb.rb = _gunHand.parent.GetComponent<Rigidbody>();
-        _gunUArmRb.rb = _gunHand.parent.parent.GetComponent<Rigidbody>();
+        _gunHandRb.rb = _gunHand.parent.GetComponent<Rigidbody>();
+        _gunLArmRb.rb = _gunHand.parent.parent.GetComponent<Rigidbody>();
+        _gunUArmRb.rb = _gunHand.parent.parent.parent.GetComponent<Rigidbody>();
 
         _gunHandRb.ogAngularDrag = _gunHandRb.rb.angularDrag;
         _gunHandRb.ogDrag = _gunHandRb.rb.drag;
@@ -43,6 +44,15 @@ public class PlayerGunHandler : NetworkBehaviour
         _gunUArmRb.ogAngularDrag = _gunUArmRb.rb.angularDrag;
         _gunUArmRb.ogDrag = _gunUArmRb.rb.drag;
 
+        if (IsOwner)
+        {
+            _lplayerCollissions = new List<Collider>();
+            foreach (Transform t in transform)
+            {
+                if (t.TryGetComponent<Collider>(out var col))
+                    _lplayerCollissions.Add(col);
+            }
+        }
     }
 
     void Update()
@@ -60,42 +70,9 @@ public class PlayerGunHandler : NetworkBehaviour
             {
                 _weapon.GetComponent<Weapon>().Shoot();
             }
-            else if (Input.GetKeyDown(KeyCode.G)) // drop
+            else if (Input.GetKeyDown(KeyCode.G))
             {
-                Debug.Log("throwing away a gun");
-
-                foreach (Transform t in _weapon.transform)
-                {
-                    if (!t.CompareTag("GunUtil")) continue;
-
-                    if (t.TryGetComponent<Light>(out var l))
-                        l.enabled = false;
-                }
-
-                var f = Instantiate(_weapon);
-
-                f.transform.localScale = _weapon.GetComponent<Weapon>().gameObject.transform.lossyScale;
-
-                f.transform.SetPositionAndRotation(_gunHand.transform.position, _gunHand.transform.rotation);
-
-                f.AddComponent<Rigidbody>().mass = _gunRBMass;
-
-                f.tag = "Gun";
-                Destroy(_weapon);
-
-                _gunHandRb.rb.drag = _gunHandRb.ogDrag;
-                _gunHandRb.rb.angularDrag = _gunHandRb.ogAngularDrag;
-
-                _gunLArmRb.rb.drag = _gunLArmRb.ogDrag;
-                _gunLArmRb.rb.angularDrag = _gunLArmRb.ogAngularDrag; 
-
-                _gunUArmRb.rb.drag = _gunUArmRb.ogDrag;
-                _gunUArmRb.rb.angularDrag = _gunUArmRb.ogAngularDrag;
-
-                _gunHandRb.rb.mass = 1.0f;
-
-                HasWeapon = false;
-                EquippedWeapon = null;
+                DropWeapon();
             }
             
         }
@@ -113,17 +90,36 @@ public class PlayerGunHandler : NetworkBehaviour
         {
             _gunRBMass = closestGun.GetComponent<Rigidbody>().mass;
 
-            var go = Instantiate(closestGun);
-            go.GetComponent<NetworkObject>().Spawn();
+            var offset = closestGun.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG
+                ? new Vector3(-4.9f, -20.8f, 0.0f)
+                : Vector3.zero;
 
-            Destroy(go.GetComponent<NetworkRigidbody>());
-            Destroy(go.GetComponent<Rigidbody>());
-            go.SetPositionAndRotation(_gunHand.position, _gunHand.rotation);
 
-            if (go.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG)
-                go.rotation *= Quaternion.Euler(-4.9f, -20.8f, 0.0f);
+            foreach (var playerCol in _lplayerCollissions)
+            {
+                print(closestGun.name + " Ignores " + playerCol.name);
+                Physics.IgnoreCollision(closestGun.GetComponent<Collider>(), playerCol, true); // should ignore
 
-            foreach (Transform t in go.transform)
+                foreach (Transform gunT in closestGun.transform)
+                    if (gunT.TryGetComponent<Collider>(out var gunCol))
+                    {
+                        print(gunCol.name + " Ignores " + playerCol.name);
+                        Physics.IgnoreCollision(gunCol, playerCol, true); // should ignore
+                    }
+            }
+               
+
+            if (closestGun.TryGetComponent<TransformFollower>(out var tfollower))
+                tfollower.SetTarget(_gunHand, offset);
+            else
+                closestGun.AddComponent<TransformFollower>().SetTarget(_gunHand, offset);
+
+            //go.SetPositionAndRotation(_gunHand.position, _gunHand.rotation);
+
+            //if (go.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG)
+            //    go.rotation *= Quaternion.Euler(-4.9f, -20.8f, 0.0f);
+
+            foreach (Transform t in closestGun.transform)
             {
                 if (!t.CompareTag("GunUtil")) continue;
 
@@ -132,25 +128,75 @@ public class PlayerGunHandler : NetworkBehaviour
             }
 
             // helps with aiming
-            _gunHandRb.rb.drag = 25;
-            _gunHandRb.rb.angularDrag = 25;
+            _gunHandRb.rb.drag = 15;
+            _gunHandRb.rb.angularDrag = 15;
 
-            _gunLArmRb.rb.drag = 25;
-            _gunLArmRb.rb.angularDrag = 25;
+            _gunLArmRb.rb.drag = 15;
+            _gunLArmRb.rb.angularDrag = 15;
             
-            _gunUArmRb.rb.drag = 25;
-            _gunUArmRb.rb.angularDrag = 25;
+            _gunUArmRb.rb.drag = 15;
+            _gunUArmRb.rb.angularDrag = 15;
 
-            go.parent = _gunHand;
-            go.tag = "Untagged";
-            closestGun.GetComponent<NetworkObject>().Despawn();
-            Destroy(closestGun.gameObject);
-            _weapon = go.gameObject;
+            //go.parent = _gunHand;
+            closestGun.tag = "Untagged";
+            _weapon = closestGun.gameObject;
             _gunHandRb.rb.mass = 0.2f;
 
             HasWeapon = true;
-            EquippedWeapon = go.GetComponent<Weapon>();
+            EquippedWeapon = closestGun.GetComponent<Weapon>();
+            closestGun.GetComponent<Weapon>().IsEquippedByPlayer = true;
         }
+    }
+
+    private void DropWeapon()
+    {
+        Destroy(_weapon.GetComponent<TransformFollower>());
+
+        foreach (var playerCol in _lplayerCollissions)
+        {
+            Physics.IgnoreCollision(_weapon.GetComponent<Collider>(), playerCol, true); // should ignore
+            foreach (Transform gunT in _weapon.transform)
+                if (gunT.TryGetComponent<Collider>(out var gunCol))
+                    Physics.IgnoreCollision(gunCol, playerCol, false); // should not ignore
+        }
+      
+
+        foreach (Transform t in _weapon.transform)
+        {
+            if (!t.CompareTag("GunUtil")) continue;
+
+            if (t.TryGetComponent<Light>(out var l))
+                l.enabled = false;
+        }
+
+        //var f = Instantiate(_weapon);
+
+        //f.transform.localScale = _weapon.GetComponent<Weapon>().gameObject.transform.lossyScale;
+
+        //f.transform.SetPositionAndRotation(_gunHand.transform.position, _gunHand.transform.rotation);
+
+        //f.AddComponent<Rigidbody>().mass = _gunRBMass;
+
+        _weapon.tag = "Gun";
+
+        _gunHandRb.rb.drag = _gunHandRb.ogDrag;
+        _gunHandRb.rb.angularDrag = _gunHandRb.ogAngularDrag;
+
+        _gunLArmRb.rb.drag = _gunLArmRb.ogDrag;
+        _gunLArmRb.rb.angularDrag = _gunLArmRb.ogAngularDrag;
+
+        _gunUArmRb.rb.drag = _gunUArmRb.ogDrag;
+        _gunUArmRb.rb.angularDrag = _gunUArmRb.ogAngularDrag;
+
+        _gunHandRb.rb.mass = 1.0f;
+
+        HasWeapon = false;
+        EquippedWeapon = null;
+
+        foreach (var playerCol in _lplayerCollissions)
+            Physics.IgnoreCollision(_weapon.GetComponent<Collider>(), playerCol, false);
+
+        _weapon.GetComponent<Weapon>().IsEquippedByPlayer = false;
     }
 
 }

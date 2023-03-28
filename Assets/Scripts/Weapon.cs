@@ -25,6 +25,8 @@ public class Weapon : MonoBehaviour
         public Transform Transform;
     }
 
+    [HideInInspector] public bool IsEquippedByPlayer;
+
     private bool _canShoot = false;
 
     [SerializeField] private Transform _endOfBarrel;
@@ -72,11 +74,13 @@ public class Weapon : MonoBehaviour
         _canShoot = false;
         Ammo--;
 
-        if (Random.Range(0f, 1f) > 0.2f)
+        // extra variation
+        if (Random.Range(0f, 1f) > 0.1f)
             AudioManager.Instance.Play_BulletFlyBy();
 
         Debug.DrawRay(_endOfBarrel.position, _endOfBarrel.forward, Color.red, 3);
         bool rocketFlag = false;
+
         // Rocket has own hitscan function
         if (WeaponType == WEAPON.RPG)
         {
@@ -155,7 +159,7 @@ public class Weapon : MonoBehaviour
     /// <summary>
     /// scans for hit for type
     /// </summary>
-    /// <returns>whether the a player has been hit</returns>
+    /// <returns>whether a player has been hit</returns>
     private bool HitScan(RaycastHit hit)
     {
         var root = hit.transform.root;

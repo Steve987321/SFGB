@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Utils\TransformFollower.cs" />
     <Compile Include="Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansPostProcess.cs" />
     <Compile Include="Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansImporter.cs" />
     <Compile Include="Assets\Scripts\AmbientCamShake.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerGunHandler.cs" />
     <Compile Include="Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMeshUtils.cs" />
     <Compile Include="Assets\Scripts\Utils\Helpers.cs" />
+    <Compile Include="Assets\Scripts\Utils\RigidBodyFollower.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\3rdParty\TextMesh Pro\Shaders\TMPro.cginc" />
