@@ -31,6 +31,7 @@ public class GOPooler : MonoBehaviour
     {
         foreach (var t in objectPool)
         {
+            if (t == null) continue;
             if (!t.activeInHierarchy)
                 return t;
         }

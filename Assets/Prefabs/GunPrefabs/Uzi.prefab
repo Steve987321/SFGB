@@ -597,6 +597,7 @@ GameObject:
   - component: {fileID: 8804138058998208910}
   - component: {fileID: -6319928464935213072}
   - component: {fileID: 8952704854459724312}
+  - component: {fileID: -8424936586099512232}
   m_Layer: 0
   m_Name: Uzi
   m_TagString: Gun
@@ -717,6 +718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59abe4cc9a85e144cb43c2da5d642a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsEquippedByPlayer: 0
   _endOfBarrel: {fileID: 6093084191220549032}
   GunFxs:
   - Type: 1
@@ -726,7 +728,8 @@ MonoBehaviour:
   Recoil: 2
   FireDelay: 0.05
   Damage: 5
-  Ammo: 30
+  Ammo:
+    m_InternalValue: 33
   BulletForce: 5
 --- !u!114 &8804138058998208910
 MonoBehaviour:
@@ -746,9 +749,9 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -782,6 +785,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-8424936586099512232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6092560963864797438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fba045444366f643b1ac23e1873aee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &6092580814682530752
 GameObject:
   m_ObjectHideFlags: 0

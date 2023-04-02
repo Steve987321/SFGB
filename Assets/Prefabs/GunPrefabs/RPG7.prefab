@@ -348,6 +348,7 @@ GameObject:
   - component: {fileID: 72151457401954769}
   - component: {fileID: 4341646557588300698}
   - component: {fileID: 7485322341077527069}
+  - component: {fileID: 1707955720512552743}
   m_Layer: 6
   m_Name: RPG7
   m_TagString: Gun
@@ -466,6 +467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59abe4cc9a85e144cb43c2da5d642a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsEquippedByPlayer: 0
   _endOfBarrel: {fileID: 5018089850546387874}
   GunFxs:
   - Type: 1
@@ -475,7 +477,8 @@ MonoBehaviour:
   Recoil: 25
   FireDelay: 1
   Damage: 30
-  Ammo: 1
+  Ammo:
+    m_InternalValue: 1
   BulletForce: 10
 --- !u!114 &72151457401954769
 MonoBehaviour:
@@ -495,9 +498,9 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -531,6 +534,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1707955720512552743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5018934004163609166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fba045444366f643b1ac23e1873aee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &5019073073930295372
 GameObject:
   m_ObjectHideFlags: 0

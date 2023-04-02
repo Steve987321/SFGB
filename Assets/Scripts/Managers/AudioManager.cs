@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Experimental.AI;
 
-public class AudioManager : MonoBehaviour
+public class AudioManager : NetworkBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
@@ -222,7 +223,8 @@ public class AudioManager : MonoBehaviour
         Asource.volume = _ogSfxVol;
     }
 
-    public void Play_BulletHit(Vector3 at)
+    [ServerRpc(RequireOwnership = false)]
+    public void Play_BulletHitServerRpc(Vector3 at)
     {
         Play_SFX(_bulletImpactSounds[Random.Range(0, _bulletImpactSounds.Length)], at, false, 0.2f);
     }

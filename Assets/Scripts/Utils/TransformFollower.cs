@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class TransformFollower : MonoBehaviour
 {
-    public Transform Target;
+    public Transform Target = null;
+    //public Transform Target;
 
     public Vector3 RotationOffset; 
 
@@ -12,13 +14,14 @@ public class TransformFollower : MonoBehaviour
     {
          Target = target;
     }
+
     public void SetTarget(Transform target, Vector3 rotoffset)
     {
          Target = target;
          RotationOffset = rotoffset;
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (Target == null) return;
 
@@ -26,7 +29,5 @@ public class TransformFollower : MonoBehaviour
             transform.SetPositionAndRotation(Target.position, Target.rotation * Quaternion.Euler(RotationOffset));
         else
             transform.SetPositionAndRotation(Target.position, Target.rotation);
-
     }
-
 }

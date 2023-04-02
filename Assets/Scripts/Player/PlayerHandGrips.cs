@@ -62,26 +62,26 @@ public class PlayerHandGrips : NetworkBehaviour
         }
 
         HeldObject = item.gameObject;
-        Debug.Log("grabbing: " + HeldObject.name);
+        print("grabbing: " + HeldObject.name);
         _isHolding = true;
 
         // Debug.Log(item.name);
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        //if (_mdown && !_isHolding)
-        //{
-        //    if (!collision.gameObject.CompareTag("Prop")) return;
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    //if (_mdown && !_isHolding)
+    //    //{
+    //    //    if (!collision.gameObject.CompareTag("Prop")) return;
 
-        //    if (collision.gameObject.GetComponent<FixedJoint>() == null)
-        //    {
-        //        var j = collision.gameObject.AddComponent<FixedJoint>();
-        //        j.connectedBody = _rb;
-        //    }
-        //    HeldObject = collision.gameObject;
-        //    _isHolding = true;
-        //}
-    }
+    //    //    if (collision.gameObject.GetComponent<FixedJoint>() == null)
+    //    //    {
+    //    //        var j = collision.gameObject.AddComponent<FixedJoint>();
+    //    //        j.connectedBody = _rb;
+    //    //    }
+    //    //    HeldObject = collision.gameObject;
+    //    //    _isHolding = true;
+    //    //}
+    //}
 
 }

@@ -36,7 +36,7 @@ public class RelativePlayerRotation : NetworkBehaviour
 
         //var pos = Camera.main.ScreenToWorldPoint(new Vectoasr3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
+        Debug.DrawRay(ray.origin, ray.direction * 10);
         if (Physics.Raycast(ray, out var hit, 100f, 1 << _ignoreLayer.value))
         {
             Debug.DrawLine(hit.point, _rbObj.position);

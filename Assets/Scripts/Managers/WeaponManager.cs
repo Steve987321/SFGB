@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// <summary>
 /// handles the weapons in the current scene
 /// </summary>
-public class WeaponManager : MonoBehaviour
+public class WeaponManager : NetworkBehaviour
 {
     // flag for when it is allowed to spawn in weapons
     public bool CanSpawnWeapons = false;
@@ -49,6 +49,8 @@ public class WeaponManager : MonoBehaviour
 
     void Update()
     {
+        if (!IsServer) return;
+
         _activeWeapons = FindObjectsOfType<Weapon>(false).ToList();
 
         // show where loaded guns are 
@@ -56,7 +58,7 @@ public class WeaponManager : MonoBehaviour
         {
             foreach (var weapon in _activeWeapons)
             {
-                if (weapon.CompareTag("Gun") && weapon.Ammo > 0)
+                if (weapon.CompareTag("Gun") && weapon.Ammo.Value > 1)
                 {
                     var screenpoint = Camera.main.WorldToScreenPoint(weapon.transform.position);
                     var go = Instantiate(_icon, _canvas);
@@ -72,21 +74,28 @@ public class WeaponManager : MonoBehaviour
         if (_iconTimer > 0)
             _iconTimer -= Time.deltaTime;
 
+        if (!IsServer) return;
+
         if (!CanSpawnWeapons) return;
 
         if (_timer > WeaponSpawnFrequency)
         {
-            CleanUp();
-            SpawnWeapons();
+            CleanUpServerRpc();
+            SpawnWeaponsServerRpc();
             _timer = 0;
         }
 
         _timer += Time.deltaTime;
     }
 
-    public void SpawnWeapons()
+    [ServerRpc]
+    private void SpawnWeaponsServerRpc()
     {
-        // spawn weapons in groups of four 
+        SpawnWeapons();
+    }
+
+    private void SpawnWeapons()
+    {
         if (_activeWeapons.Count >= MaxWeapons - 4) return;
 
         for (var i = 0; i < 4; i++)
@@ -96,17 +105,18 @@ public class WeaponManager : MonoBehaviour
             weapon.GetComponent<NetworkObject>().Spawn(true);
             weapon.transform.position = Helper.GetRandomPointOnPlane(
                 SpawnPlanes.Length == 1 ? SpawnPlanes[0] : SpawnPlanes[Random.Range(0, SpawnPlanes.Length)]
-                );
+            );
         }
     }
 
-    private void CleanUp()
+    [ServerRpc]
+    private void CleanUpServerRpc()
     {
         if (_activeWeapons.Count < MaxWeapons - 4) return;
 
         foreach (var weapon in _activeWeapons)
         {
-            if (!weapon.IsEquippedByPlayer && weapon.Ammo <= 0)
+            if (!weapon.IsEquippedByPlayer && weapon.gameObject.GetComponent<TransformFollower>().Target != null && weapon.Ammo.Value <= 1)
             {
                 weapon.GetComponent<NetworkObject>().Despawn();
                 Destroy(weapon.gameObject);
@@ -114,6 +124,7 @@ public class WeaponManager : MonoBehaviour
 
             if (weapon.transform.position.y < -30)
             {
+                weapon.GetComponent<NetworkObject>().Despawn();
                 Destroy(weapon.gameObject);
             }
         }

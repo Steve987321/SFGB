@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -1668442127350083704}
   - component: {fileID: 7647402585770006787}
   - component: {fileID: -347614744942982272}
+  - component: {fileID: 8438465867667715892}
   m_Layer: 0
   m_Name: M1911
   m_TagString: Gun
@@ -137,6 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59abe4cc9a85e144cb43c2da5d642a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsEquippedByPlayer: 0
   _endOfBarrel: {fileID: 5660779203453164816}
   GunFxs:
   - Type: 1
@@ -146,7 +148,8 @@ MonoBehaviour:
   Recoil: 3
   FireDelay: 0.4
   Damage: 5
-  Ammo: 12
+  Ammo:
+    m_InternalValue: 12
   BulletForce: 5
 --- !u!114 &-1668442127350083704
 MonoBehaviour:
@@ -166,9 +169,9 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -202,6 +205,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8438465867667715892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5659079409233261006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fba045444366f643b1ac23e1873aee7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Target: {fileID: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &5659166459906188110
 GameObject:
   m_ObjectHideFlags: 0

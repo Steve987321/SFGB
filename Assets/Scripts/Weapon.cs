@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Weapon : MonoBehaviour
+public class Weapon : NetworkBehaviour
 {
     public enum WEAPON
     {
@@ -45,7 +46,7 @@ public class Weapon : MonoBehaviour
     public float Recoil;
     public float FireDelay;
     public float Damage;
-    public int Ammo;
+    public NetworkVariable<int> Ammo = new(10, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     [Tooltip("the force of impact")]
     public float BulletForce;
@@ -61,18 +62,41 @@ public class Weapon : MonoBehaviour
         if (transform.root.gameObject.name.Contains("player", StringComparison.OrdinalIgnoreCase))
             _rbInRoot.AddRange(Helper.GetAllTransformsInChildren(transform.root.gameObject).ToList());
         _canShoot = true;
+
+        if (IsServer)
+            Ammo.Value += 1;
     }
 
     public void Shoot()
     {
-        if (_canShoot && Ammo > 0)
+        ShootServerRpc();
+    }
+
+    private bool once = false;
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ShootServerRpc()
+    {
+        if (!once)
+        {
+            Ammo.Value--;
+            once = true;
+        }
+        ShootClientRpc();
+    }
+
+    [ClientRpc]
+    public void ShootClientRpc()
+    {
+        if (_canShoot && Ammo.Value > 0)
+        {
             StartCoroutine(_Shoot());
+        }
     }
 
     private IEnumerator _Shoot()
     {
         _canShoot = false;
-        Ammo--;
 
         // extra variation
         if (Random.Range(0f, 1f) > 0.1f)
@@ -133,7 +157,7 @@ public class Weapon : MonoBehaviour
                 {
                     AudioManager.Instance.Play_BulletFlyBy();
                 }
-                AudioManager.Instance.Play_BulletHit(hit.point);
+                AudioManager.Instance.Play_BulletHitServerRpc(hit.point);
                 //print("hit: " + hit.collider.name);
                 VFXManager.Instance.apply_force(hit.point, BulletForce * 100, 3);
                 //VFXManager.Instance.play_FX(hit.point, hit.normal, );
@@ -154,6 +178,7 @@ public class Weapon : MonoBehaviour
 
         yield return new WaitForSeconds(FireDelay);
         if (WeaponType != WEAPON.RPG) _canShoot = true;
+        once = false;
     }
 
     /// <summary>
@@ -175,5 +200,12 @@ public class Weapon : MonoBehaviour
         VFXManager.Instance.add_bullet_hole(hit, VFXManager.BULLET_HOLE_TYPE.METAL);
 
         return false;
+    }
+
+    void OnGUI()
+    {
+        var spos = Camera.main.WorldToScreenPoint(transform.position);
+        spos.z = 0;
+        GUI.Label(new Rect(spos, new Vector2(100, 100)), Ammo.Value.ToString());
     }
 }

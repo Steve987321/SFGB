@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Random = UnityEngine.Random;
 
 public class Helper
 {
@@ -76,22 +73,60 @@ public class Helper
         return transforms;
     }
 
+    /// <returns> A random point on the plane. </returns>
     public static Vector3 GetRandomPointOnPlane(Transform plane)
     {
         var x3 = plane.localScale.x * 2f;
         var z3 = plane.localScale.z * 2f;
 
-        var x = Random.Range(-x3, x3);
-        var z = Random.Range(-z3, z3);
+        var x = UnityEngine.Random.Range(-x3, x3);
+        var z = UnityEngine.Random.Range(-z3, z3);
 
         var randomPoint = new Vector3(plane.position.x + x, plane.position.y, plane.position.z + z);
 
         return randomPoint;
     }
 
+    /// <summary>
+    /// Swaps 2 elements in a list
+    /// </summary>
     public static void Swap<T>(IList<T> list, int indexA, int indexB)
     {
         (list[indexB], list[indexA]) = (list[indexA], list[indexB]);
+    }
+
+    /// <summary>
+    /// Sets all child gameobjects of transform to layer,
+    /// NOTE: doesn't set the root gameobject to layer.
+    /// </summary>
+    /// <param name="layer"> Layer child objects get sets to. </param>
+    /// <param name="transform"> The root that contains child objects. </param>
+    /// <param name="recursion"> Whether to use recursion on the child objects. </param>
+    public static void SetChildLayers(LayerMask layer, Transform transform, bool recursion = false)
+    {
+        foreach (Transform t in transform)
+        {
+            t.gameObject.layer = layer;
+            if (recursion)
+                SetChildLayers(layer, t, true);
+        }
+    }
+
+    /// <summary>
+    /// Iterate through a transform root.
+    /// NOTE: doesn't run function to the root gameobject.
+    /// </summary>
+    /// <param name="transform"> The root transform. </param>
+    /// <param name="f"> A function that runs with the iterator transform as parameter. </param>
+    /// <param name="recursion"> Whether to use recursion on the iterator. </param>
+    public static void IterateThroughTransform(Transform transform, Action<Transform> f, bool recursion = false)
+    {
+        foreach (Transform t in transform)
+        {
+            f(t);
+            if (recursion)
+                IterateThroughTransform(t, f, true);
+        }
     }
 
 }

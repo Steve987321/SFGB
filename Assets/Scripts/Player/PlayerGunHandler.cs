@@ -1,12 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using Unity.VisualScripting;
-using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static Weapon;
 
 public class PlayerGunHandler : NetworkBehaviour
 {
@@ -47,38 +45,141 @@ public class PlayerGunHandler : NetworkBehaviour
         if (IsOwner)
         {
             _lplayerCollissions = new List<Collider>();
-            foreach (Transform t in transform)
-            {
-                if (t.TryGetComponent<Collider>(out var col))
-                    _lplayerCollissions.Add(col);
-            }
+
+            Helper.IterateThroughTransform(
+                transform, 
+                (t) => {
+                    if (t.TryGetComponent<Collider>(out var col))
+                        _lplayerCollissions.Add(col);
+                }, 
+                true
+            );
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (!IsOwner)
             return;
 
-        if (!HasWeapon)
-        {
+        if (!HasWeapon) 
             PickUpGunHandler();
-        }
-        else
-        {
-            if (Input.GetKey(KeyCode.Mouse0))
-            {
+        else {
+            if (Input.GetKey(KeyCode.Mouse0)) 
                 _weapon.GetComponent<Weapon>().Shoot();
-            }
-            else if (Input.GetKeyDown(KeyCode.G))
-            {
+            else if (Input.GetKey(KeyCode.G))
                 DropWeapon();
-            }
-            
         }
     }
 
-    private void PickUpGunHandler()
+    [ServerRpc(RequireOwnership = false)]
+    void SetWeaponTransformTargetServerRpc(NetworkObjectReference gun)
+    {
+        print("SERVER");
+        gun.TryGet(out var wepon, NetworkManager.Singleton);
+        ok(wepon.transform);
+    } 
+
+    [ClientRpc]
+    void SetWeaponTransformTargetClientRpc(NetworkObjectReference gun)
+    {
+        print("CLIENT");
+
+        gun.TryGet(out var closestGun);
+        var offset = closestGun.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG
+            ? new Vector3(-4.9f, -20.8f, 0.0f)
+            : Vector3.zero;
+
+        var gunRB = closestGun.GetComponent<Rigidbody>();
+        var gunCol = closestGun.GetComponent<Collider>();
+
+        _gunRBMass = gunRB.mass;
+
+        gunCol.enabled = false;
+        Helper.IterateThroughTransform(closestGun.transform,
+            (t) =>
+            {
+                if (t.TryGetComponent<Collider>(out var col)) col.enabled = false;
+            });
+
+        gunRB.mass = 1;
+        gunRB.useGravity = false;
+        gunRB.isKinematic = false;
+
+        // add drag for smoother aim
+        _gunHandRb.rb.drag = 25;
+        _gunHandRb.rb.angularDrag = 25;
+
+        _gunLArmRb.rb.drag = 25;
+        _gunLArmRb.rb.angularDrag = 25;
+
+        _gunUArmRb.rb.drag = 25;
+        _gunUArmRb.rb.angularDrag = 25;
+
+        //go.parent = _gunHand;
+        closestGun.tag = "Untagged";
+        _weapon = closestGun.gameObject;
+        _gunHandRb.rb.mass = 0.2f;
+
+        EquippedWeapon = closestGun.GetComponent<Weapon>();
+        EquippedWeapon.IsEquippedByPlayer = true;
+
+        if (closestGun.TryGetComponent<TransformFollower>(out var tfollower))
+            tfollower.SetTarget(_gunHand, offset);
+    }
+
+    void ok(Transform closestGun)
+    {
+        var offset = closestGun.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG
+            ? new Vector3(-4.9f, -20.8f, 0.0f)
+            : Vector3.zero;
+
+        var gunRB = closestGun.GetComponent<Rigidbody>();
+        var gunCol = closestGun.GetComponent<Collider>();
+
+        _gunRBMass = gunRB.mass;
+
+        gunCol.enabled = false;
+        Helper.IterateThroughTransform(closestGun.transform,
+            (t) =>
+            {
+                if (t.TryGetComponent<Collider>(out var col)) col.enabled = false;
+            });
+
+        gunRB.mass = 1;
+        gunRB.useGravity = false;
+        gunRB.isKinematic = false;
+
+        // add drag for smoother aim
+        _gunHandRb.rb.drag = 25;
+        _gunHandRb.rb.angularDrag = 25;
+
+        _gunLArmRb.rb.drag = 25;
+        _gunLArmRb.rb.angularDrag = 25;
+
+        _gunUArmRb.rb.drag = 25;
+        _gunUArmRb.rb.angularDrag = 25;
+
+        //go.parent = _gunHand;
+        closestGun.tag = "Untagged";
+        _weapon = closestGun.gameObject;
+        _gunHandRb.rb.mass = 0.2f;
+
+        EquippedWeapon = closestGun.GetComponent<Weapon>();
+        EquippedWeapon.IsEquippedByPlayer = true;
+
+        if (closestGun.TryGetComponent<TransformFollower>(out var tfollower))
+            tfollower.SetTarget(_gunHand, offset);
+    }
+
+    void SetWeaponTransformTarget(NetworkObjectReference gun)
+    {
+        print("try picking up gun");
+
+        SetWeaponTransformTargetServerRpc(gun);
+    }
+
+    void PickUpGunHandler()
     {
         var transforms = GameObject.FindGameObjectsWithTag("Gun").Where(gun => gun.transform.parent == null).Select(gun => gun.transform);
 
@@ -86,34 +187,13 @@ public class PlayerGunHandler : NetworkBehaviour
         if (closestGun == null) return;
         if (!Helper.IsInReach(closestGun.position, transform.position, 3.0f)) return;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKey(KeyCode.E))
         {
-            _gunRBMass = closestGun.GetComponent<Rigidbody>().mass;
+            //SetWeaponTransformTarget(closestGun.GetComponent<NetworkObject>());
 
-            var offset = closestGun.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG
-                ? new Vector3(-4.9f, -20.8f, 0.0f)
-                : Vector3.zero;
-
-
-            foreach (var playerCol in _lplayerCollissions)
-            {
-                print(closestGun.name + " Ignores " + playerCol.name);
-                Physics.IgnoreCollision(closestGun.GetComponent<Collider>(), playerCol, true); // should ignore
-
-                foreach (Transform gunT in closestGun.transform)
-                    if (gunT.TryGetComponent<Collider>(out var gunCol))
-                    {
-                        print(gunCol.name + " Ignores " + playerCol.name);
-                        Physics.IgnoreCollision(gunCol, playerCol, true); // should ignore
-                    }
-            }
-               
-
-            if (closestGun.TryGetComponent<TransformFollower>(out var tfollower))
-                tfollower.SetTarget(_gunHand, offset);
-            else
-                closestGun.AddComponent<TransformFollower>().SetTarget(_gunHand, offset);
-
+            HasWeapon = true;
+            SetWeaponTransformTargetServerRpc(closestGun.GetComponent<NetworkObject>());
+            ok(closestGun);
             //go.SetPositionAndRotation(_gunHand.position, _gunHand.rotation);
 
             //if (go.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG)
@@ -126,40 +206,27 @@ public class PlayerGunHandler : NetworkBehaviour
                 if (t.TryGetComponent<Light>(out var l))
                     l.enabled = true;
             }
-
-            // helps with aiming
-            _gunHandRb.rb.drag = 15;
-            _gunHandRb.rb.angularDrag = 15;
-
-            _gunLArmRb.rb.drag = 15;
-            _gunLArmRb.rb.angularDrag = 15;
-            
-            _gunUArmRb.rb.drag = 15;
-            _gunUArmRb.rb.angularDrag = 15;
-
-            //go.parent = _gunHand;
-            closestGun.tag = "Untagged";
-            _weapon = closestGun.gameObject;
-            _gunHandRb.rb.mass = 0.2f;
-
-            HasWeapon = true;
-            EquippedWeapon = closestGun.GetComponent<Weapon>();
-            closestGun.GetComponent<Weapon>().IsEquippedByPlayer = true;
         }
     }
 
-    private void DropWeapon()
+    [ServerRpc(RequireOwnership = false)]
+    private void DropWeaponServerRpc()
     {
-        Destroy(_weapon.GetComponent<TransformFollower>());
+         DropWeaponClientRpc();   
+    }
 
-        foreach (var playerCol in _lplayerCollissions)
-        {
-            Physics.IgnoreCollision(_weapon.GetComponent<Collider>(), playerCol, true); // should ignore
-            foreach (Transform gunT in _weapon.transform)
-                if (gunT.TryGetComponent<Collider>(out var gunCol))
-                    Physics.IgnoreCollision(gunCol, playerCol, false); // should not ignore
-        }
-      
+    [ClientRpc]
+    private void DropWeaponClientRpc()
+    {
+        _weapon.GetComponent<TransformFollower>().SetTarget(null);
+
+        //foreach (var playerCol in _lplayerCollissions)
+        //{
+        //    Physics.IgnoreCollision(_weapon.GetComponent<Collider>(), playerCol, true); // should ignore
+        //    foreach (Transform gunT in _weapon.transform)
+        //        if (gunT.TryGetComponent<Collider>(out var gunCol))
+        //            Physics.IgnoreCollision(gunCol, playerCol, false); // should not ignore
+        //}
 
         foreach (Transform t in _weapon.transform)
         {
@@ -179,6 +246,20 @@ public class PlayerGunHandler : NetworkBehaviour
 
         _weapon.tag = "Gun";
 
+        var gunRB = _weapon.GetComponent<Rigidbody>();
+        var gunCol = _weapon.GetComponent<Collider>();
+
+        Helper.IterateThroughTransform(_weapon.transform,
+            (t) =>
+            {
+                if (t.TryGetComponent<Collider>(out var col)) col.enabled = false;
+            });
+
+        gunCol.enabled = true;
+        gunRB.mass = _gunRBMass;
+        gunRB.useGravity = true;
+        gunRB.isKinematic = false;
+
         _gunHandRb.rb.drag = _gunHandRb.ogDrag;
         _gunHandRb.rb.angularDrag = _gunHandRb.ogAngularDrag;
 
@@ -193,10 +274,14 @@ public class PlayerGunHandler : NetworkBehaviour
         HasWeapon = false;
         EquippedWeapon = null;
 
-        foreach (var playerCol in _lplayerCollissions)
-            Physics.IgnoreCollision(_weapon.GetComponent<Collider>(), playerCol, false);
+        //foreach (var playerCol in _lplayerCollissions)
+        //    Physics.IgnoreCollision(_weapon.GetComponent<Collider>(), playerCol, false);
 
         _weapon.GetComponent<Weapon>().IsEquippedByPlayer = false;
     }
 
+    void DropWeapon()
+    {
+        DropWeaponServerRpc();  
+    }
 }

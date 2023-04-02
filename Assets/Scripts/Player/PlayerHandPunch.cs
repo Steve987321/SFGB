@@ -36,7 +36,7 @@ public class PlayerHandPunch : NetworkBehaviour
         if (_rb.velocity.magnitude > _punchHitThreshold && !_onceFlag)
         {
             AudioManager.Instance.Play_Swoosh(transform.position);
-            VFXManager.Instance.apply_force(transform.position, _punchForce * 10, 1, _excludeRb);
+            VFXManager.Instance.apply_forceEx(transform.position, _punchForce * 10, 1, _excludeRb);
             var colliders = Physics.OverlapSphere(transform.position, 0.5f);
             foreach (var col in colliders)
             {

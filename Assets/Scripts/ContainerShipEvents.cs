@@ -1,11 +1,12 @@
 using System.Collections;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
 /*
  * handles the continous events on the container ship map
  */
-public class ContainerShipEvents : MonoBehaviour
+public class ContainerShipEvents : NetworkBehaviour
 {
 
     [SerializeField] private ParticleSystem[] _waterSplashFX;
@@ -23,59 +24,91 @@ public class ContainerShipEvents : MonoBehaviour
     public float LightningBoltRadius = 5f;
     public float LightningBoltDamage = 10f;
 
-    [SerializeField] private Transform _lightningBoltArea;
-    [SerializeField] private GameObject _lightningBolt;
-    [SerializeField] private GameObject _warningObj;
-    [SerializeField] private TextMeshPro _countdownTimerObj;
+    [Space]
 
-    private float _countdownTimer = 0;
+    [SerializeField] private Transform _lightningBoltArea;
+    [SerializeField] private GameObject _lightningBoltPrefab;
+    [SerializeField] private GameObject _warningObjPrefab;
+    [SerializeField] private TextMeshPro _countdownTimerObjPrefab;
+
+    private NetworkVariable<float> _countdownTimer = new(0);
+
+    private float _lightningCounter = 0;
 
     void Start()
     {
-        InvokeRepeating(nameof(LightningStrike), 1, LightningShowDelay);
         InvokeRepeating(nameof(WaterSplash), 1, 7f);
+
+        if (!IsServer) return;
+
+        this.GetComponent<NetworkObject>().Spawn(true);
+
+        _lightningCounter = LightningShowDelay;
+
+        //InvokeRepeating(nameof(LightningStrikeServerRpc), 1, LightningShowDelay);
     }
 
-    /*
-     * plays a lightning bolt on a random point on the container ship
-     */
-    void LightningStrike()
+    void Update()
     {
-        if (Random.Range(0, 100) < LightningChance)
+        if (!IsServer) return;
+
+        if (_lightningCounter < 0)
         {
-            StartCoroutine(PlayLightningStrike());
+            LightingStrikeServerRpc();
+            _lightningCounter = LightningShowDelay;
         }
+
+        _lightningCounter -= Time.deltaTime;
+
+    }
+
+    private bool _flag = false;
+
+    [ServerRpc]
+    void LightingStrikeServerRpc()
+    {
+        if (!_flag)
+        {
+            _flag = !_flag;
+            return;
+        }
+        if (Random.Range(0, 100) < LightningChance)
+            StartCoroutine(PlayLightningStrike());
     }
 
     IEnumerator PlayLightningStrike()
     {
         // show warning circle
         var randomPos = Helper.GetRandomPointOnPlane(_lightningBoltArea);
-        _warningObj.SetActive(true);
-        _warningObj.transform.SetPositionAndRotation(randomPos, Quaternion.identity);
 
-        _countdownTimer = LightningWarningTime;
+        var warningObj = Instantiate(_warningObjPrefab);
+        warningObj.transform.SetPositionAndRotation(randomPos, Quaternion.identity);
+        warningObj.GetComponent<NetworkObject>().Spawn(true);
 
-         _countdownTimerObj.gameObject.SetActive(true);
-        _countdownTimerObj.transform.SetPositionAndRotation(randomPos + new Vector3(0, 0.5f, 0), Quaternion.Euler(60, 0, 0));
+        _countdownTimer.Value = LightningWarningTime;
+
+        //var countdownTimerObj = Instantiate(_countdownTimerObjPrefab);
+        //countdownTimerObj.GetComponent<NetworkObject>().Spawn(true);
+        //countdownTimerObj.transform.SetPositionAndRotation(randomPos + new Vector3(0, 0.5f, 0), Quaternion.Euler(60, 0, 0));
         
         // give player time to move and show timer
-        while (_countdownTimer >= 0)
+        while (_countdownTimer.Value >= 0)
         {
             var halfradius = LightningBoltRadius / 2;
             Debug.DrawLine(randomPos + new Vector3(-halfradius, -halfradius, -halfradius), randomPos + new Vector3(halfradius, halfradius, halfradius));
 
-            _countdownTimerObj.text = _countdownTimer.ToString("N1");
-            _countdownTimer -= Time.deltaTime;
+            //countdownTimerObj.text = _countdownTimer.Value.ToString("N1");
+            _countdownTimer.Value -= Time.deltaTime;
             yield return null;
         }
 
-        _warningObj.SetActive(false);
-        _countdownTimerObj.gameObject.SetActive(false);
+        warningObj.GetComponent<NetworkObject>().Despawn();
+        //countdownTimerObj.GetComponent<NetworkObject>().Despawn();
 
         float randAngle = Random.Range(-20, 20);
-        _lightningBolt.transform.SetPositionAndRotation(randomPos, Quaternion.Euler(randAngle, randAngle, randAngle));
-        _lightningBolt.SetActive(true);
+        var lightningBolt = Instantiate(_lightningBoltPrefab);
+        lightningBolt.GetComponent<NetworkObject>().Spawn(true);
+        lightningBolt.transform.SetPositionAndRotation(randomPos, Quaternion.Euler(randAngle, randAngle, randAngle));
 
         AudioManager.Instance.Play_Thunder(randomPos);
 
@@ -87,10 +120,9 @@ public class ContainerShipEvents : MonoBehaviour
 
         yield return new WaitForSeconds(0.15f); // show bolt for 0.15 seconds
 
-        _lightningBolt.SetActive(false);
+        lightningBolt.GetComponent<NetworkObject>().Despawn();
     }
 
-    
     /*
      * plays a water splash on random side of the container ship (front or back side)
      */

@@ -52,7 +52,7 @@ public class Rocket : MonoBehaviour
             if (collider.transform.root.TryGetComponent<Player>(out var player)
                 && !collisionRoots.Contains(collider.transform.root))
             {
-                player.DoDamage(collider.transform.root == self ? player.Health / 5f : player.Health / 2f);
+                player.DoDamage(collider.transform.root == self ? player.Health.Value / 5f : player.Health.Value / 2f);
                 collisionRoots.Add(collider.transform.root);
             }
 

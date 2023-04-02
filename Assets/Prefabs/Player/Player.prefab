@@ -802,7 +802,7 @@ MonoBehaviour:
   RotationSpeed: 3
   _ignoreLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   _rbObj: {fileID: 7380780876201090715}
 --- !u!4 &5287484459352815071 stripped
 Transform:
@@ -1860,6 +1860,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 8.378
       objectReference: {fileID: 0}
+    - target: {fileID: 6108835449684270639, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 0.0000000033734249
+      objectReference: {fileID: 0}
+    - target: {fileID: 6108835449684270639, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 0.009386633
+      objectReference: {fileID: 0}
+    - target: {fileID: 6108835449684270639, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: 0.000000012198924
+      objectReference: {fileID: 0}
     - target: {fileID: 6143333767841132102, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
       propertyPath: m_Layer
       value: 0
@@ -2095,6 +2107,18 @@ PrefabInstance:
     - target: {fileID: 7223186083645260460, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7223186083645260466, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 5.2386895e-10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7223186083645260466, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 0.0047986982
+      objectReference: {fileID: 0}
+    - target: {fileID: 7223186083645260466, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: -4.526351e-10
       objectReference: {fileID: 0}
     - target: {fileID: 7223186083645260466, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
       propertyPath: m_AngularXDrive.positionSpring
@@ -2540,6 +2564,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 6326905812958950459}
+--- !u!114 &2320491902274022603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947390902446243047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+--- !u!114 &3614775908178501421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947390902446243047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1092284991511943306 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4274821981245747456, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
@@ -2558,11 +2620,87 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 5493022862445804126}
+--- !u!114 &3666674126226688981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092284991511943306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+--- !u!114 &6982890412336524692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092284991511943306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1226604457504510656 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2701705513298033482, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
   m_PrefabInstance: {fileID: 3781797288182049162}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1058281761208564741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226604457504510656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4189117810074563204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226604457504510656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!114 &7380780876201090688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2643,6 +2781,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 5287484459352815071}
+--- !u!114 &5928538077339384678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608145415655578104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7279450280959893879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1608145415655578104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!1 &1716207506035952646 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2570030615864911244, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
@@ -2661,6 +2837,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 6621071180465749159}
+--- !u!114 &7023137747435728584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716207506035952646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+--- !u!114 &8550375755729399423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1716207506035952646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2708946525866238645 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1289076348679703359, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
@@ -2684,6 +2898,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 6274386933477541403}
+--- !u!114 &8988542020174556009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2906746227804573668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+--- !u!114 &8144869815630185657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2906746227804573668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3214160319222825300 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1792812391911565534, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
@@ -2707,6 +2959,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 1004159001339400202}
+--- !u!114 &4737226957472064248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4279988862811013298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+--- !u!114 &3091656426814439904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4279988862811013298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4957890855402525339 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8121771267222977297, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
@@ -2777,6 +3067,44 @@ MonoBehaviour:
   _gunHandler: {fileID: 7380780876201090742}
   IsDominantHand: 0
   HeldObject: {fileID: 0}
+--- !u!114 &7732183347713197144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5721724449044562435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8275646505687714411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5721724449044562435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!54 &5784396403666643769 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 7223186083645260467, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
@@ -2787,6 +3115,44 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7899488040798885027, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
   m_PrefabInstance: {fileID: 3781797288182049162}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &196297059615621096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6474832789092171049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &265083650772563108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6474832789092171049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
 --- !u!114 &3103055711894058105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2852,6 +3218,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 884291554129780942}
+--- !u!114 &6265029570829116834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7151878613911410762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+--- !u!114 &7434895123255258030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7151878613911410762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7380780876201090715 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5915031171226810129, guid: 8b7124068e411e845816e91a4a856bcc, type: 3}
@@ -2875,3 +3279,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimTargetLimb: {fileID: 7412900480900225908}
+--- !u!114 &8884196193062799651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8072057054044749719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9212456830725544230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8072057054044749719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d94450028abe446b3fc45523b3291d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1

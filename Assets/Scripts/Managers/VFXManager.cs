@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 
 using Random = UnityEngine.Random;
 
-public class VFXManager : MonoBehaviour
+public class VFXManager : NetworkBehaviour
 {
     public enum VFX_TYPE
     {
@@ -217,6 +219,18 @@ public class VFXManager : MonoBehaviour
 
     public void apply_force(Vector3 at, float force, float radius)
     {
+        apply_forceServerRpc(at, force, radius);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void apply_forceServerRpc(Vector3 at, float force, float radius)
+    {
+        apply_forceClientRpc(at, force, radius);
+    }
+
+    [ClientRpc]
+    private void apply_forceClientRpc(Vector3 at, float force, float radius)
+    {
         var colliders = Physics.OverlapSphere(at, radius);
         foreach (var col in colliders)
         {
@@ -227,13 +241,30 @@ public class VFXManager : MonoBehaviour
             }
         }
     }
-    public void apply_force(Vector3 at, float force, float radius, Rigidbody[] Exclude)
+
+    private Rigidbody[] rbs = new Rigidbody[25];
+    public void apply_forceEx(Vector3 at, float force, float radius, Rigidbody[] Exclude)
     {
+        rbs = Exclude;
+        apply_forceExServerRpc(at.x, at.y, at.z, force, radius);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void apply_forceExServerRpc(float x, float y, float z, float force, float radius)
+    {
+        apply_forceExClientRpc(x, y, z, force, radius);
+    }
+
+    [ClientRpc]
+    void apply_forceExClientRpc(float x, float y, float z, float force, float radius)
+    {
+        var at = new Vector3(x, y, z);
         var colliders = Physics.OverlapSphere(at, radius);
+
         foreach (var col in colliders)
         {
             var rb = col.GetComponent<Rigidbody>();
-            if (Exclude.Contains(rb)) continue;
+            if (rbs.Contains(rb)) continue;
 
             if (rb != null)
             {

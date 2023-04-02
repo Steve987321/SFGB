@@ -28,7 +28,7 @@ public class Car : MonoBehaviour
                 ignore.Add(rb);
         }
 
-        VFXManager.Instance.apply_force(transform.position, 3000f, 7f, ignore.ToArray());
+        VFXManager.Instance.apply_forceEx(transform.position, 3000f, 7f, ignore.ToArray());
         CameraManager.Instance.DoShake(0.3f, 16f);
     }
 }

@@ -322,6 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4997379439221395680}
   - component: {fileID: 4997379439221395683}
+  - component: {fileID: 9093737264381916876}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -396,6 +397,22 @@ MonoBehaviour:
   FreqGainLimit: 8000
   OctaveRangeLimit: 8000
   CenterFreqLimit: 8000
+--- !u!114 &9093737264381916876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4997379439221395681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &4997379439458089521
 GameObject:
   m_ObjectHideFlags: 0
