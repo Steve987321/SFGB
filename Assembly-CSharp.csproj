@@ -78,6 +78,7 @@
     <Compile Include="Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansDecalTools.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAnimationHandler.cs" />
     <Compile Include="Assets\Scripts\Weapon.cs" />
+    <Compile Include="Assets\Scripts\TheReadyBox.cs" />
     <Compile Include="Assets\3rdParty\Quixel\Scripts\BridgeImporter\MegascansMatertialUtils.cs" />
     <Compile Include="Assets\Scripts\NetworkForClient\OwnerNetworkAnimator.cs" />
     <Compile Include="Assets\3rdParty\AssetStore\RainMaker\Prefab\RainCollision.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Assets\Scripts\Utils\RigidBodyFollower.cs" />
     <Compile Include="Assets\Scripts\Managers\OptionsManager.cs" />
     <Compile Include="Assets\Scripts\Utils\Helpers.cs" />
-    <Compile Include="Assets\TheReadyBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\3rdParty\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -122,6 +122,7 @@
     <None Include="Assets\3rdParty\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\3rdParty\AssetStore\RainMaker\Prefab\RainShader.shader" />
     <None Include="Assets\3rdParty\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\3rdParty\AssetStore\Simple city plain\Read_me.txt" />
     <None Include="Assets\3rdParty\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\3rdParty\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\3rdParty\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />

@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,13 +25,22 @@ public class GameManager : NetworkBehaviour
         HighWay
     }
 
+    // will return next fight scene map
+    public static Scene NextFightScene(Scene currScene)
+    {
+        return currScene switch
+        {
+            Scene.Scene0 => Scene.Street,
+            Scene.Street => Scene.ContainerShip,
+            Scene.ContainerShip => Scene.HighWay,
+            Scene.HighWay => Scene.Street,
+            _ => Scene.ContainerShip
+        };
+    }
+
     public Scene CurrentScene = Scene.Scene0;
 
     private GameState _state;
-
-    // how many players alive in current scene
-    private int _playersAlive;
-
 
     [SerializeField] private GameObject _playerPrefab;
 
@@ -80,7 +91,7 @@ public class GameManager : NetworkBehaviour
 
     public Scene GetRandomFightScene()
     {
-        int f = Random.Range(1, 4);
+        int f = UnityEngine.Random.Range(1, 4);
         switch (f)
         {
             case 1: return Scene.ContainerShip;
@@ -109,18 +120,19 @@ public class GameManager : NetworkBehaviour
     void LateUpdate()
     {
         if (!IsServer) return;
-        // last man standing 
-        if (_playersAlive == 1)
-        {
 
+        var f = FindObjectsOfType<Player>();
+
+        // last man standing 
+        if (f.Any(p => p.Health.Value <= 0))
+        {
+            LoadScene(NextFightScene(CurrentScene));
         }
 
         if (CurrentScene == Scene.Scene0)
         {
             if (NetworkManager.Singleton.ConnectedClientsIds.Count == 2)
             {
-                var f = FindObjectsOfType<Player>();
-
                 if (f[0].IsReady.Value && f[1].IsReady.Value)
                 {
                     LoadScene(GetRandomFightScene());

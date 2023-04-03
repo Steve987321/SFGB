@@ -6,9 +6,7 @@ using UnityEngine;
 
 public class Rocket : MonoBehaviour
 {
-    /// <summary>
-    /// this will make the rotation of the vfx rotate towards the player
-    /// </summary>
+   
     public Transform PlayerTransform;
 
     public List<Transform> ExcludeObj = new List<Transform>();
@@ -18,7 +16,7 @@ public class Rocket : MonoBehaviour
     {
         // destroy rocket if nothing has been hit for amount of time
         timer += Time.deltaTime;
-        if (timer > 7)
+        if (timer > 2)
         {
             if (!gameObject.IsDestroyed())
                 Destroy(this.gameObject);
@@ -34,6 +32,8 @@ public class Rocket : MonoBehaviour
         }
         var hitcontact = col.GetContact(0).point;
         var hitnormal = col.GetContact(0).normal;
+
+        // relative to Player position
         var relativePos = PlayerTransform.position - hitcontact;
 
         DoRocketDamage(PlayerTransform, hitcontact);
