@@ -49,8 +49,6 @@ public class WeaponManager : NetworkBehaviour
 
     void Update()
     {
-        if (!IsServer) return;
-
         _activeWeapons = FindObjectsOfType<Weapon>(false).ToList();
 
         // show where loaded guns are 

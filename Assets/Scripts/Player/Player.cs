@@ -9,6 +9,8 @@ public class Player : NetworkBehaviour
 
     public NetworkVariable<bool> IsReady = new(false);
 
+    public float Cooldown = 0.1f;
+
     void Start()
     {
         if (!IsOwner)
@@ -20,12 +22,22 @@ public class Player : NetworkBehaviour
         Helper.SetChildLayers(ignoreLayer, transform, true);
     }
 
+    void Update()
+    {
+        if (Cooldown > 0)
+        {
+            Cooldown -= Time.deltaTime;
+        }
+    }
+
     /// <summary>
     /// applies damage to this player
     /// </summary>
     /// <param name="val"> Amount of damage. </param>
     public void DoDamage(float val)
     {
+        if (Cooldown > 0) return;
+
         DoDamageServerRpc(val);
 
         float t = Mathf.Clamp01(1f - Health.Value / 100f);
@@ -52,6 +64,7 @@ public class Player : NetworkBehaviour
 
         // cam shake on damage to any player
         CameraManager.Instance.DoShake(0.3f, 3f, 0.7f);
+        Cooldown = 0.1f;
     }
 
     [ServerRpc(RequireOwnership = false)]

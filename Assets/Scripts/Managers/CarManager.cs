@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CarManager : MonoBehaviour
+public class CarManager : NetworkBehaviour
 {
     [SerializeField] private Transform map;
     [SerializeField] private GameObject[] _cars;
@@ -37,6 +38,8 @@ public class CarManager : MonoBehaviour
 
     void Update()
     {
+        if (!IsServer) return;
+
         _toLeftTunnelTimer += Time.deltaTime;
         _toRightTunnelTimer += Time.deltaTime;
         _leftThroughTimer += Time.deltaTime;
@@ -44,32 +47,39 @@ public class CarManager : MonoBehaviour
 
         if (_toLeftTunnelTimer > _rand1)
         {
-            PlayCarAt(Pos.TOLEFT);
+            PlayCarAtServerRpc(Pos.TOLEFT);
             SetRandomVars();
             _toLeftTunnelTimer = 0;
         }
         else if (_toRightTunnelTimer > _rand1)
         {
-            PlayCarAt(Pos.TORIGHT);
+            PlayCarAtServerRpc(Pos.TORIGHT);
             SetRandomVars();
             _toRightTunnelTimer = 0;
         }
         if (_leftThroughTimer > _rand2)
         {
-            PlayCarAt(Pos.LEFT);
+            PlayCarAtServerRpc(Pos.LEFT);
             SetRandomVars();
             _leftThroughTimer = 0;
         }
         else if (_rightThroughTimer > _rand2)
         {
-            PlayCarAt(Pos.RIGHT);
+            PlayCarAtServerRpc(Pos.RIGHT);
             SetRandomVars();
             _rightThroughTimer = 0;
         }
         
     }
 
-    private void PlayCarAt(Pos pos)
+    [ServerRpc]
+    private void PlayCarAtServerRpc(Pos pos)
+    {
+        PlayCarAtClientRpc(pos);
+    }
+
+    [ClientRpc]
+    private void PlayCarAtClientRpc(Pos pos)
     {
         var randomCar = Instantiate(_cars[Random.Range(0, _cars.Length)]);
         randomCar.transform.parent = map;

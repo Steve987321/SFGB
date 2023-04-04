@@ -243,9 +243,9 @@ public class VFXManager : NetworkBehaviour
     }
 
     private Rigidbody[] rbs = new Rigidbody[25];
-    public void apply_forceEx(Vector3 at, float force, float radius, Rigidbody[] Exclude)
+    public void apply_forceEx(Vector3 at, float force, float radius, Rigidbody[] exclude)
     {
-        rbs = Exclude;
+        rbs = exclude;
         apply_forceExServerRpc(at.x, at.y, at.z, force, radius);
     }
 
@@ -264,12 +264,9 @@ public class VFXManager : NetworkBehaviour
         foreach (var col in colliders)
         {
             var rb = col.GetComponent<Rigidbody>();
+            if (rb == null) continue;
             if (rbs.Contains(rb)) continue;
-
-            if (rb != null)
-            {
-                rb.AddExplosionForce(force, at, radius, 1, ForceMode.Force);
-            }
+            rb.AddExplosionForce(force, at, radius, 1, ForceMode.Force);
         }
     }
 

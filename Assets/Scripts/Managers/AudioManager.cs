@@ -253,7 +253,8 @@ public class AudioManager : NetworkBehaviour
 
     public void Play_Punch(Vector3 at)
     {
-        Play_SFX(_punchSounds[Random.Range(0, _punchSounds.Length)], at);
+        Play_PunchServerRpc(at);
+        //Play_SFX(_punchSounds[Random.Range(0, _punchSounds.Length)], at);
     }
 
     public void Play_Explosion(Vector3 at)
@@ -275,6 +276,19 @@ public class AudioManager : NetworkBehaviour
     {
         isInFight = true;
         InFightTimer = 10f;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void Play_PunchServerRpc(Vector3 at)
+    {
+        Play_SFX(_punchSounds[Random.Range(0, _punchSounds.Length)], at);
+        Play_PunchClientRpc(at);
+    }
+
+    [ClientRpc]
+    private void Play_PunchClientRpc(Vector3 at)
+    {
+        Play_SFX(_punchSounds[Random.Range(0, _punchSounds.Length)], at);
     }
 
 }

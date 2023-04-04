@@ -47,20 +47,27 @@ public class GameManager : NetworkBehaviour
     void Awake()
     {
         Instance = this;
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(gameObject);
     }
 
     public override void OnNetworkSpawn()
     {
+        print("on network spawn");
         if (IsServer) {
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SceneManager_OnLoadEventCompleted;
         }
     }
 
+    private void SingletonOnOnClientConnectedCallback(ulong obj)
+    {
+        var player = Instantiate(_playerPrefab);
+        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(obj, true);
+    }
+
     // only use this
     public void StartHost()
     {
-        NetworkManager.Singleton.ConnectionApprovalCallback += ConnectionApprovalCallback;
+        //NetworkManager.Singleton.ConnectionApprovalCallback += ConnectionApprovalCallback;
         NetworkManager.Singleton.StartHost();
     }
 
@@ -85,6 +92,7 @@ public class GameManager : NetworkBehaviour
 
     public void LoadScene(Scene scene)
     {
+        print("loading scene: " + scene.ToString());
         NetworkManager.Singleton.SceneManager.LoadScene(scene.ToString(), LoadSceneMode.Single);
         CurrentScene = scene;
     }
@@ -103,6 +111,27 @@ public class GameManager : NetworkBehaviour
     }
     private void SceneManager_OnLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
+        //foreach (var id in NetworkManager.Singleton.ConnectedClientsIds)
+        //{
+        //    var player = Instantiate(_playerPrefab);
+        //    player.GetComponent<NetworkObject>().SpawnAsPlayerObject(id, true);
+        //    print("spawned player prefab");
+        //}
+        // Destroy existing player prefabs
+        var players = FindObjectsOfType<Player>();
+        foreach (var player in players)
+        {
+            if (player.IsLocalPlayer)
+            {
+                player.GetComponent<NetworkObject>().Despawn(true);
+            }
+            else
+            {
+                Destroy(player.gameObject);
+            }
+        }
+
+        // Instantiate new player prefabs for each connected client
         foreach (var id in NetworkManager.Singleton.ConnectedClientsIds)
         {
             var player = Instantiate(_playerPrefab);
@@ -123,20 +152,17 @@ public class GameManager : NetworkBehaviour
 
         var f = FindObjectsOfType<Player>();
 
-        // last man standing 
-        if (f.Any(p => p.Health.Value <= 0))
-        {
-            LoadScene(NextFightScene(CurrentScene));
-        }
-
-        if (CurrentScene == Scene.Scene0)
-        {
-            if (NetworkManager.Singleton.ConnectedClientsIds.Count == 2)
-            {
-                if (f[0].IsReady.Value && f[1].IsReady.Value)
-                {
-                    LoadScene(GetRandomFightScene());
-                }
+        //if (CurrentScene == Scene.Scene0) {
+        //    if (NetworkManager.Singleton.ConnectedClientsIds.Count == 2) {
+        //        if (f[0].IsReady.Value && f[1].IsReady.Value) {
+        //            LoadScene(GetRandomFightScene());
+        //        }
+        //    }
+        //}
+        if (CurrentScene != Scene.Scene0) {
+            // last man standing 
+            if (f.Any(p => p.Health.Value <= 0)) {
+                LoadScene(NextFightScene(CurrentScene));
             }
         }
     }
@@ -144,10 +170,19 @@ public class GameManager : NetworkBehaviour
 
     void OnGUI()
     {
+        if (IsServer)
+        {
+            if (GUI.Button(new Rect(Screen.width - 150, 50, 150, 40), "Load Random Level"))
+                LoadScene(GetRandomFightScene());
+            if (GUI.Button(new Rect(Screen.width - 150, 90, 150, 40), "Load Next Level"))
+                LoadScene(NextFightScene(CurrentScene));
+        }
+
+#if UNITY_EDITOR
         if (GUI.Button(new Rect(50, 300, 100, 50), "Start Client"))
             NetworkManager.Singleton.StartClient();
         if (GUI.Button(new Rect(50, 360, 100, 50), "Start Host"))
             StartHost();
+#endif
     }
-
 }

@@ -18,6 +18,7 @@ public class PlayerHandPunch : NetworkBehaviour
 
     void Start()
     {
+        if (!IsOwner) return;
         _excludeRb = Helper.GetAllRigidBodiesInChildren(_root.gameObject);
         _rb = GetComponent<Rigidbody>();
     }
@@ -36,13 +37,16 @@ public class PlayerHandPunch : NetworkBehaviour
         if (_rb.velocity.magnitude > _punchHitThreshold && !_onceFlag)
         {
             AudioManager.Instance.Play_Swoosh(transform.position);
-            VFXManager.Instance.apply_forceEx(transform.position, _punchForce * 10, 1, _excludeRb);
+            VFXManager.Instance.apply_forceEx(transform.position, _punchForce * 100, 1, _excludeRb);
             var colliders = Physics.OverlapSphere(transform.position, 0.5f);
             foreach (var col in colliders)
             {
                 if (_excludeRb.Contains(col.attachedRigidbody)) continue;
                 if (col.transform.root.TryGetComponent<Player>(out var player))
                 {
+                    if (player.Health.Value <= 2.5f)
+                        VFXManager.Instance.apply_forceEx(transform.position, _punchForce * 500, 1, _excludeRb);
+
                     player.DoDamage(2.5f);
 
                     AudioManager.Instance.Play_Punch(transform.position);

@@ -64,7 +64,7 @@ public class RelativePlayerMovement : NetworkBehaviour
         IsMovingBackwards = tmp is > min and < max;
     }
 
-//#if UNITY_EDITOR
+#if UNITY_EDITOR
 
     void OnGUI()
     {
@@ -87,7 +87,7 @@ public class RelativePlayerMovement : NetworkBehaviour
         GUI.Label(new Rect(spos, new Vector2(100, 100)), health.ToString());
     }
 
-//#endif
+#endif
 
 
 }

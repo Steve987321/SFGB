@@ -202,10 +202,12 @@ public class Weapon : NetworkBehaviour
         return false;
     }
 
+#if UNITY_EDITOR
     void OnGUI()
     {
         var spos = Camera.main.WorldToScreenPoint(transform.position);
         spos.z = 0;
         GUI.Label(new Rect(spos, new Vector2(100, 100)), Ammo.Value.ToString());
     }
+#endif
 }
