@@ -41,6 +41,7 @@ public class Console : MonoBehaviour
         //bgTex.Apply();
 
         //GuiStyle.normal.background = bgTex;
+        GuiStyle.wordWrap = false;
 
         logHistory.Add(new Log());
     }
