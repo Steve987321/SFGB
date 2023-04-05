@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,7 +18,7 @@ public class GameManager : NetworkBehaviour
         Playing,
     }
 
-    public enum Scene
+    public enum Scene : int
     {
         Scene0, 
         Street,
@@ -39,6 +40,7 @@ public class GameManager : NetworkBehaviour
     }
 
     public Scene CurrentScene = Scene.Scene0;
+    public TextMeshProUGUI GameCodeText;
 
     private GameState _state;
 
@@ -58,41 +60,33 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    private void SingletonOnOnClientConnectedCallback(ulong obj)
-    {
-        var player = Instantiate(_playerPrefab);
-        player.GetComponent<NetworkObject>().SpawnAsPlayerObject(obj, true);
-    }
-
     // only use this
-    public void StartHost()
+    public async void StartGame()
     {
         //NetworkManager.Singleton.ConnectionApprovalCallback += ConnectionApprovalCallback;
-        NetworkManager.Singleton.StartHost();
+
+        await Relay.CreateRelay();
+        
+        if (!NetworkManager.Singleton.StartHost())
+            Debug.LogError("failed to start as host");
+
+        GameManager.Instance.LoadScene(Scene.Scene0);
     }
 
-    private void ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest arg1, NetworkManager.ConnectionApprovalResponse arg2)
+    public async void JoinGame(string joinCode)
     {
-        if (CurrentScene != Scene.Scene0)
-        {
-            arg2.Approved = false;
-            arg2.Reason = "Already in fight";
-            return;
-        }
+        await Relay.JoinRelay(joinCode);
 
-        if (NetworkManager.Singleton.ConnectedClientsIds.Count >= 2)
-        {
-            arg2.Approved = false;
-            arg2.Reason = "max players reached";
-            return;
-        }
-
-        arg2.Approved = true;
+        NetworkManager.Singleton.StartClient();
     }
 
     public void LoadScene(Scene scene)
     {
         print("loading scene: " + scene.ToString());
+        if (scene != Scene.Scene0)
+        {
+            GameCodeText.gameObject.SetActive(false);
+        }
         NetworkManager.Singleton.SceneManager.LoadScene(scene.ToString(), LoadSceneMode.Single);
         CurrentScene = scene;
     }
@@ -148,7 +142,7 @@ public class GameManager : NetworkBehaviour
 
     void LateUpdate()
     {
-        if (!IsServer) return;
+        if (!IsHost) return;
 
         var f = FindObjectsOfType<Player>();
 
@@ -170,7 +164,7 @@ public class GameManager : NetworkBehaviour
 
     void OnGUI()
     {
-        if (IsServer)
+        if (IsHost)
         {
             if (GUI.Button(new Rect(Screen.width - 150, 50, 150, 40), "Load Random Level"))
                 LoadScene(GetRandomFightScene());
@@ -178,11 +172,11 @@ public class GameManager : NetworkBehaviour
                 LoadScene(NextFightScene(CurrentScene));
         }
 
-#if UNITY_EDITOR
-        if (GUI.Button(new Rect(50, 300, 100, 50), "Start Client"))
-            NetworkManager.Singleton.StartClient();
-        if (GUI.Button(new Rect(50, 360, 100, 50), "Start Host"))
-            StartHost();
-#endif
+        //#if UNITY_EDITOR
+        //        if (GUI.Button(new Rect(50, 300, 100, 50), "Start Client"))
+        //            NetworkManager.Singleton.StartClient();
+        //        if (GUI.Button(new Rect(50, 360, 100, 50), "Start Host"))
+        //            StartGame();
+        //#endif
     }
 }

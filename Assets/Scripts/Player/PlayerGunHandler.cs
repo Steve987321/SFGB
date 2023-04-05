@@ -77,7 +77,7 @@ public class PlayerGunHandler : NetworkBehaviour
     {
         print("SERVER");
         gun.TryGet(out var wepon, NetworkManager.Singleton);
-        ok(wepon.transform);
+        pickup(wepon.transform);
     } 
 
     [ClientRpc]
@@ -128,7 +128,7 @@ public class PlayerGunHandler : NetworkBehaviour
             tfollower.SetTarget(_gunHand, offset);
     }
 
-    void ok(Transform closestGun)
+    void pickup(Transform closestGun)
     {
         var offset = closestGun.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG
             ? new Vector3(-4.9f, -20.8f, 0.0f)
@@ -193,7 +193,7 @@ public class PlayerGunHandler : NetworkBehaviour
 
             HasWeapon = true;
             SetWeaponTransformTargetServerRpc(closestGun.GetComponent<NetworkObject>());
-            ok(closestGun);
+            pickup(closestGun);
             //go.SetPositionAndRotation(_gunHand.position, _gunHand.rotation);
 
             //if (go.GetComponent<Weapon>().WeaponType == Weapon.WEAPON.RPG)
