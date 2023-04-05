@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CarManager : NetworkBehaviour
 {
-    [SerializeField] private Transform map;
+    //[SerializeField] private Transform map;
     [SerializeField] private GameObject[] _cars;
     
     private enum Pos
@@ -75,17 +75,31 @@ public class CarManager : NetworkBehaviour
     [ServerRpc]
     private void PlayCarAtServerRpc(Pos pos)
     {
-        PlayCarAtClientRpc(pos);
+        var randomCar = Instantiate(_cars[Random.Range(0, _cars.Length)]);
+        var randomCarNo = randomCar.GetComponent<NetworkObject>();
+        randomCarNo.Spawn(true);
+        //randomCar.transform.parent = map;
+        randomCar.GetComponent<Animator>().Play(_animVal[pos]);
+        //randomCar.GetComponent<NetworkObject>().Despawn(true);
+        StartCoroutine(DespawnCar(randomCarNo.NetworkObjectId));
     }
 
-    [ClientRpc]
-    private void PlayCarAtClientRpc(Pos pos)
+    IEnumerator DespawnCar(ulong carNid)
     {
-        var randomCar = Instantiate(_cars[Random.Range(0, _cars.Length)]);
-        randomCar.transform.parent = map;
-        randomCar.GetComponent<Animator>().Play(_animVal[pos]);
-        Destroy(randomCar, 5f);
+        yield return new WaitForSeconds(5f);
+        var car = NetworkManager.Singleton.SpawnManager.SpawnedObjects[carNid];
+        car.Despawn(true);
     }
+
+    //[ClientRpc]
+    //private void PlayCarAtClientRpc(Pos pos)
+    //{
+    //    var randomCar = Instantiate(_cars[Random.Range(0, _cars.Length)]);
+    //    randomCar.GetComponent<NetworkObject>().Spawn(true);
+    //    //randomCar.transform.parent = map;
+    //    randomCar.GetComponent<Animator>().Play(_animVal[pos]);
+    //    Destroy(randomCar, 5f);
+    //}
 
     private void SetRandomVars()
     {
