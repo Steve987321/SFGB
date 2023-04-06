@@ -19,8 +19,12 @@ public class MainMenuUI : MonoBehaviour
         });
         JoinGameBtn.onClick.AddListener(() =>
         {
+            if (joinGameInputField.text.Length -1 != 6)
+            {
+                Debug.LogError("Code is invalid");
+                return;
+            }
             GameManager.Instance.JoinGame(joinGameInputField.text);
-            //NetworkManager.Singleton.StartClient();
         });
 
         LeaveGameBtn.onClick.AddListener(Application.Quit);

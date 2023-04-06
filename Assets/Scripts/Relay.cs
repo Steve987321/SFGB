@@ -1,8 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Networking.Transport.Relay;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
@@ -21,29 +25,26 @@ public class Relay : MonoBehaviour
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
 
-    public static async Task CreateRelay()
+    public static async Task<string> CreateRelay()
     {
+        string res;
         try
         {
             var alloc = await RelayService.Instance.CreateAllocationAsync(1);
 
-            GameManager.Instance.GameCodeText.text = await RelayService.Instance.GetJoinCodeAsync(alloc.AllocationId);
-            GameManager.Instance.GameCodeText.gameObject.SetActive(true);
+            res = await RelayService.Instance.GetJoinCodeAsync(alloc.AllocationId);
 
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetHostRelayData
-            (
-                alloc.RelayServer.IpV4,
-                (ushort)alloc.RelayServer.Port,
-                alloc.AllocationIdBytes,
-                alloc.Key,
-                alloc.ConnectionData
-            );
+            var relayServerData = new RelayServerData(alloc, "dtls");
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
         }
         catch (RelayServiceException e)
         {
-            Debug.LogError(e.Reason);
-            GameManager.Instance.GameCodeText.text = "";
+            Debug.LogException(e);
+            res = "";
         }
+
+        return res;
     }
 
     public static async Task JoinRelay(string code)
@@ -52,20 +53,13 @@ public class Relay : MonoBehaviour
         {
             var alloc = await RelayService.Instance.JoinAllocationAsync(code);
 
-            NetworkManager.Singleton.GetComponent<UnityTransport>().SetClientRelayData
-            (
-                alloc.RelayServer.IpV4,
-                (ushort)alloc.RelayServer.Port,
-                alloc.AllocationIdBytes,
-                alloc.Key,
-                alloc.ConnectionData,
-                alloc.HostConnectionData
-            );
-            NetworkManager.Singleton.StartClient();
+            var relayServerData = new RelayServerData(alloc, "dtls");
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
         }
         catch (RelayServiceException e)
         {
-            Debug.LogError(e.Reason);
+            Debug.LogException(e);
         }
     }
 }

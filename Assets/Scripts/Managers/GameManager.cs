@@ -40,16 +40,20 @@ public class GameManager : NetworkBehaviour
     }
 
     public Scene CurrentScene = Scene.Scene0;
-    public TextMeshProUGUI GameCodeText;
+    public string GameCode;
+
+    [SerializeField] private GameObject _playerPrefab;
 
     private GameState _state;
 
-    [SerializeField] private GameObject _playerPrefab;
+    private GUIStyle guiStyle = new();
 
     void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        guiStyle.fontSize = 30;
     }
 
     public override void OnNetworkSpawn()
@@ -65,17 +69,20 @@ public class GameManager : NetworkBehaviour
     {
         //NetworkManager.Singleton.ConnectionApprovalCallback += ConnectionApprovalCallback;
 
-        await Relay.CreateRelay();
-        
+        GameCode = await Relay.CreateRelay();
+
         if (!NetworkManager.Singleton.StartHost())
             Debug.LogError("failed to start as host");
 
-        GameManager.Instance.LoadScene(Scene.Scene0);
+        LoadScene(Scene.Scene0);
     }
 
     public async void JoinGame(string joinCode)
     {
-        await Relay.JoinRelay(joinCode);
+        var code = joinCode.Substring(0, 6);
+
+        print("trying to join with game code " + code);
+        await Relay.JoinRelay(code);
 
         NetworkManager.Singleton.StartClient();
     }
@@ -83,10 +90,6 @@ public class GameManager : NetworkBehaviour
     public void LoadScene(Scene scene)
     {
         print("loading scene: " + scene.ToString());
-        if (scene != Scene.Scene0)
-        {
-            GameCodeText.gameObject.SetActive(false);
-        }
         NetworkManager.Singleton.SceneManager.LoadScene(scene.ToString(), LoadSceneMode.Single);
         CurrentScene = scene;
     }
@@ -161,11 +164,14 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-
     void OnGUI()
     {
         if (IsHost)
         {
+            if (CurrentScene == Scene.Scene0)
+            {
+                GUI.Label(new Rect(Screen.width / 2f - 100, 50, 100, 50), GameCode, guiStyle);
+            }
             if (GUI.Button(new Rect(Screen.width - 150, 50, 150, 40), "Load Random Level"))
                 LoadScene(GetRandomFightScene());
             if (GUI.Button(new Rect(Screen.width - 150, 90, 150, 40), "Load Next Level"))
