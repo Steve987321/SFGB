@@ -33,7 +33,6 @@ This game was never finished as it was abandoned after implementing multiplayer.
 ![](https://github.com/Steve987321/SFGB/blob/master/footage/Unity_vRdMS1hDlC.gif)
 ![](https://github.com/Steve987321/SFGB/blob/master/footage/Unity_zwRzw5kYHF.gif)
 ![](https://github.com/Steve987321/SFGB/blob/master/footage/Unity_3KDSKuanie.gif)
-![](https://github.com/Steve987321/SFGB/blob/master/footage/Unity_3KDSKuanie.gif)
 ![](https://github.com/Steve987321/SFGB/blob/master/footage/image.png)
 ![](https://github.com/Steve987321/SFGB/blob/master/footage/image2.png)
 ![](https://github.com/Steve987321/SFGB/blob/master/footage/image3.png)
